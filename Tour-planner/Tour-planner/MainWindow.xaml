@@ -5,8 +5,73 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tour_planner"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="MainWindow" Height="650" Width="1000">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ToolBarTray Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <ToolBar Style="{StaticResource MaterialDesignToolBar}" ClipToBounds="False">
+                <Menu>
+                    <MenuItem Header="_File">
+                        <MenuItem Header="New" />
+                        <MenuItem Header="Open" />
+                        <MenuItem Header="Save" Icon="{materialDesign:PackIcon Kind=ContentSave}" />
+                        <MenuItem Header="Save As..." />
+                    </MenuItem>
+                </Menu>
+                <Separator/>
+                <Menu>
+                    <MenuItem Header="Edit" />
+                </Menu>
+                <Separator/>
+                <Menu>
+                    <MenuItem Header="Options" Width="150">
+
+                    </MenuItem>
+                </Menu>
+                <Separator/>
+                <Menu>
+                    <MenuItem Header="Help" Width="104" />
+                </Menu>
+                <Separator/>
+                <TextBox x:Name="SearchTextBox" materialDesign:HintAssist.Hint="Search" Width="200" HorizontalAlignment="Right" />
+                <Button Content="{materialDesign:PackIcon Kind=Search}"  Style="{StaticResource MaterialDesignPaperLightButton}"  />
+
+            </ToolBar>
+        </ToolBarTray>
+        <ToolBar Grid.Column="0" Grid.Row="1">
+            <Label Content="Touren" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" />
+            <Separator/>
+            <Button Content="{materialDesign:PackIcon Kind=Add}" Margin="5"/>
+            <Separator/>
+            <Button Content="{materialDesign:PackIcon Kind=Minus}" Margin="5"/>
+            <Separator/>
+            
+        </ToolBar>
+        <ListBox Grid.Column="0" Grid.Row="2" Margin="5,0" Background="DarkGray">
+            <TextBlock Text="Plain" />
+            <TextBlock Text="Old" />
+            <TextBlock Text="ListBox" />
+            <TextBlock Text="Full of junk" />
+            
+        </ListBox>
+       
 
     </Grid>
 </Window>
