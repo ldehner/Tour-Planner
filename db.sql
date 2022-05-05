@@ -13,16 +13,14 @@ CREATE TABLE TOURS(
 drop table if exists logs;
 CREATE TABLE LOGS(
     logId uuid not null primary key,
+    tourId uuid not null,
 	date timestamp not null,
 	comment text not null,
     difficulty smallint not null,
     duration time not null,
 	rating smallint not null,
 	CONSTRAINT fk_tours
-      FOREIGN KEY(customer_id) 
+      FOREIGN KEY(tourId) 
 	  REFERENCES tours(tourId)
 	  ON DELETE CASCADE
 );
-
-
-
