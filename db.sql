@@ -1,6 +1,6 @@
 drop table if exists tours;
 CREATE TABLE TOURS(
-    id uuid not null primary key,
+    tourId uuid not null primary key,
 	name varchar(30) not null,
 	description text not null,
     duration time not null,
@@ -12,12 +12,16 @@ CREATE TABLE TOURS(
 
 drop table if exists logs;
 CREATE TABLE LOGS(
-    id uuid not null primary key,
+    logId uuid not null primary key,
 	date timestamp not null,
 	comment text not null,
     difficulty smallint not null,
     duration time not null,
-	rating smallint not null
+	rating smallint not null,
+	CONSTRAINT fk_tours
+      FOREIGN KEY(customer_id) 
+	  REFERENCES tours(tourId)
+	  ON DELETE CASCADE
 );
 
 
