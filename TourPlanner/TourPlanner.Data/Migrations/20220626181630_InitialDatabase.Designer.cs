@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TourPlanner.Data;
@@ -11,9 +12,10 @@ using TourPlanner.Data;
 namespace TourPlanner.Data.Migrations
 {
     [DbContext(typeof(ToursDataContext))]
-    partial class ToursDataContextModelSnapshot : ModelSnapshot
+    [Migration("20220626181630_InitialDatabase")]
+    partial class InitialDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +39,6 @@ namespace TourPlanner.Data.Migrations
 
                     b.Property<short>("Difficulty")
                         .HasColumnType("smallint");
-
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("interval");
 
                     b.Property<short>("Rating")
                         .HasColumnType("smallint");
@@ -71,9 +70,6 @@ namespace TourPlanner.Data.Migrations
 
                     b.Property<double>("Distance")
                         .HasColumnType("double precision");
-
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("interval");
 
                     b.Property<string>("Name")
                         .IsRequired()
