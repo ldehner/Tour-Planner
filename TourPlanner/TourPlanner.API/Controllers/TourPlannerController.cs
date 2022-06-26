@@ -18,45 +18,13 @@ namespace TourPlannerAPI.Controllers
         {
             this.context = context;
         }
-        [HttpGet]
+        [HttpGet("GetTours")]
         public async Task<ActionResult<List<Tours>>> Get()
         {
             return Ok(await this.context.Tours.ToListAsync());
         }
-        private const string URL = "https://www.mapquestapi.com/directions/v2/route";
-        private string urlParameters = "?key=M5qGCXac3rjCtRpRe2aRBlxK3GiVKnnE&unit=k&from=In%20Freybergen%2025%202120%20Wolkersdorf%20&to=Tulpenweg%204%20Bisingen";
-        [HttpGet("mapquest")]
-        public async Task<ActionResult<List<Tours>>> Get(int id)
-        {
-          
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(URL);
 
-            // Add an Accept header for JSON format.
-            client.DefaultRequestHeaders.Accept.Add(
-            new MediaTypeWithQualityHeaderValue("application/json"));
-
-            // List data response.
-            HttpResponseMessage response = client.GetAsync(urlParameters).Result;  // Blocking call! Program will wait here until a response is received or a timeout occurs.
-            if (response.IsSuccessStatusCode)
-            {
-                client.Dispose();
-                return Ok(response.Content);
-            }
-            else
-            {
-                client.Dispose();
-                return BadRequest(response);
-            }
-
-            //Make any other calls using HttpClient here.
-
-            //Dispose once all HttpClient calls are complete. This is not necessary if the containing object will be disposed of; for example in this case the HttpClient instance will be disposed automatically when the application terminates so the following call is superfluous.
-            
-        
-        }
-
-        [HttpGet("{TourId}")]
+        [HttpGet("GetTours/{TourId}")]
         public async Task<ActionResult<Tours>> Get(Guid TourId)
         {
             var tour = await this.context.Tours.FindAsync(TourId);
@@ -64,7 +32,7 @@ namespace TourPlannerAPI.Controllers
             return Ok(tour);
         }
 
-        [HttpPost]
+        [HttpPost("AddTour")]
         public async Task<ActionResult<List<Tours>>> AddTour(SimpleTour tour)
         {
             Console.WriteLine(tour);
@@ -86,5 +54,13 @@ namespace TourPlannerAPI.Controllers
 
             return Ok(tours);
         }
+
+        //DeleteTour
+        //EditTour
+        //AddLog
+        //GetLogs
+        //GetLogs/{LogId}
+        //DeleteLog
+        //EditLog
     }
 }
