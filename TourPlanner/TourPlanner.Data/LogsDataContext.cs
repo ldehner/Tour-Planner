@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.Data
 {
-    public class ToursDataContext : DbContext
+    public class LogsDataContext : DbContext
     {
-        public ToursDataContext(DbContextOptions<ToursDataContext> options) : base(options)
+        public LogsDataContext(DbContextOptions<LogsDataContext> options) : base(options)
         {
 
         }
@@ -17,7 +17,6 @@ namespace TourPlanner.Data
         {
             modelBuilder.UseSerialColumns();
         }
-        public DbSet<Tours> Tours { get; set; }
         public DbSet<Logs> Logs { get; set; }
     }
 }
