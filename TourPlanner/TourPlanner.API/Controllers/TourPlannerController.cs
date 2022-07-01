@@ -119,7 +119,6 @@ namespace TourPlannerAPI.Controllers
             var newlog = new Logs
             {
                 TourId = TourId,
-                LogId = Guid.NewGuid(),
                 Comment = log.Comment,
                 Date = log.Date,
                 Rating = log.Rating,
@@ -128,7 +127,7 @@ namespace TourPlannerAPI.Controllers
             };
             tour.Logs.Add(newlog);
             
-            await this.context.SaveChangesAsync();
+            this.context.SaveChanges();
 
             return Ok(await this.context.Tours.ToListAsync());
         }
