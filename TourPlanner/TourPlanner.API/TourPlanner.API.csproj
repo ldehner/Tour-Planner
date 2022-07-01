@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="PL\**" />
+    <Content Remove="PL\**" />
+    <EmbeddedResource Remove="PL\**" />
+    <None Remove="PL\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>
@@ -17,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TourPlanner.Data\TourPlanner.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="PL\" />
   </ItemGroup>
 
 </Project>

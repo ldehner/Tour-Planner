@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.Xml;
+using TourPlanner.API.BL;
+using TourPlanner.API.DAL;
 using TourPlanner.API.Data;
+using TourPlanner.API.Mapping;
 using TourPlanner.Data;
 
 namespace TourPlannerAPI.Controllers
@@ -12,110 +15,52 @@ namespace TourPlannerAPI.Controllers
     [ApiController]
     public class TourPlannerController : ControllerBase
     {
-        private readonly ToursDataContext context;
+        private readonly ToursDataContext _context;
+        private readonly ITourManager _tourManager;
 
-        public TourPlannerController(ToursDataContext context)
+        public TourPlannerController(ToursDataContext context, ITourManager tourManager)
         {
-            this.context = context;
+            this._context = context;
+            this._tourManager = tourManager;
         }
         [HttpGet("GetTours")]
-        public async Task<ActionResult<List<Tours>>> Get()
+        public async Task<ActionResult<List<PresentationTour>>> Get()
         {
-            return Ok(await this.context.Tours.Include(l => l.Logs).ToListAsync());
+            return Ok(await _tourManager.GetToursAsync());
         }
 
         [HttpGet("GetTours/{TourId}")]
-        public async Task<ActionResult<Tours>> Get(Guid TourId)
+        public async Task<ActionResult<PresentationTour>> Get(Guid tourId)
         {
-            var tour = await this.context.Tours.Include(i => i.Logs)
-                .FirstOrDefaultAsync(i => i.TourId == TourId);
-            if (tour == null) return BadRequest("Tour not found.");
-            return Ok(tour);
+            return Ok(await _tourManager.GetTourAsync(tourId));
         }
 
         [HttpPost("AddTour")]
-        public async Task<ActionResult<List<Tours>>> AddTour(SimpleTour tour)
+        public async Task<ActionResult<List<PresentationTour>>> AddTour(SimpleTour tour)
         {
-            Console.WriteLine(tour);
-            var tourId = Guid.NewGuid();
-
-            Tours tours = new Tours()
-            {
-                TourId = tourId,
-                Description = tour.Description,
-                Distance = tour.Distance,
-                Duration = tour.Duration.TimeOfDay,
-                Type = tour.Type,
-                Start = tour.Start,
-                Destination = tour.Destination,
-                Logs = new List<Logs> { new Logs
-                {
-                    TourId = tourId,
-                LogId = Guid.NewGuid(),
-                Comment = "comment",
-                Date = new DateTime(),
-                Rating = 1,
-                Duration = new TimeSpan(),
-                Difficulty = 2,
-                } }
-            };
-            this.context.Tours.Add(tours);
-            await this.context.SaveChangesAsync();
-
-            return Ok(tours);
+            return Ok(await _tourManager.AddTourAsync(tour));
         }
         //DeleteTour
         [HttpDelete("DeleteTour/{TourId}")]
-        public async Task<ActionResult<Tours>> DeleteTour(Guid TourId)
+        public async Task<ActionResult<List<PresentationTour>>> DeleteTour(Guid TourId)
         {
-            var tour = await this.context.Tours.FindAsync(TourId);
-            if (tour == null) return BadRequest("Tour not found.");
-            this.context.Tours.Remove(tour);
-            await this.context.SaveChangesAsync();
-            return Ok(await this.context.Tours.ToListAsync());
+            return Ok(await _tourManager.DeleteTourAsync(TourId));
         }
         //EditTour
-        [HttpPut("UpdateTour")]
-        public async Task<ActionResult<Tours>> UpdateTour(Tours request)
+        [HttpPut("UpdateTour/{TourId}")]
+        public async Task<ActionResult<PresentationTour>> UpdateTour(Guid tourId, SimpleTour request)
         {
-
-            var tour = await this.context.Tours.Include(i => i.Logs)
-                .FirstOrDefaultAsync(i => i.TourId == request.TourId);
-            if (tour == null) return BadRequest("Tour not found.");
-            tour.Name = request.Name;
-            tour.Duration = request.Duration;
-            tour.Start = request.Start;
-            tour.Description = request.Description;
-            tour.Destination = request.Destination;
-            tour.Type = request.Type;
-
-            await this.context.SaveChangesAsync();
-
-            return Ok(await this.context.Tours.ToListAsync());
+            return Ok(await _tourManager.UpdateTourAsync(tourId, request));
         }
         //AddLog
         [HttpPost("AddLog/{TourId}")]
-        public async Task<ActionResult<Tours>> AddLog(Guid TourId, SimpleLog log)
+        public async Task<ActionResult<PresentationTour>> AddLog(Guid TourId, SimpleLog log)
         {
 
-            var tour = await this.context.Tours.Include(i => i.Logs)
+            var tour = await this._context.Tours.Include(i => i.Logs)
                 .FirstOrDefaultAsync(i => i.TourId == TourId);
             if (tour == null) return BadRequest("Tour not found.");
-            
-            /**
-            tour.Logs = new List<Logs> {
-            new Logs
-            {
-                TourId = TourId,
-                LogId = Guid.NewGuid(),
-                Comment = log.Comment,
-                Date = log.Date,
-                Rating = log.Rating,
-                Duration = log.Duration.TimeOfDay,
-                Difficulty = log.Difficulty,
-            }
-            };
-            **/
+         
             var newlog = new Logs
             {
                 TourId = TourId,
@@ -127,17 +72,17 @@ namespace TourPlannerAPI.Controllers
             };
             tour.Logs.Add(newlog);
             
-            this.context.SaveChanges();
+            this._context.SaveChanges();
 
-            return Ok(await this.context.Tours.ToListAsync());
+            return Ok(await this._context.Tours.ToListAsync());
         }
         
         //GetLogs
         [HttpGet("GetLogs/{TourId}")]
-        public async Task<ActionResult<Tours>> GetLogs(Guid TourId)
+        public async Task<ActionResult<List<PresentationLog>>> GetLogs(Guid TourId)
         {
 
-            var tour = await this.context.Tours.Include(i => i.Logs)
+            var tour = await this._context.Tours.Include(i => i.Logs)
                 .FirstOrDefaultAsync(i => i.TourId == TourId);
             if (tour == null) return BadRequest("Tour not found.");
             return Ok(tour.Logs);
@@ -145,10 +90,10 @@ namespace TourPlannerAPI.Controllers
         }
         //GetLogs/{LogId}
         [HttpGet("GetLogs/{TourId}/{LogId}")]
-        public async Task<ActionResult<Tours>> GetLog(Guid TourId, Guid LogId)
+        public async Task<ActionResult<PresentationLog>> GetLog(Guid TourId, Guid LogId)
         {
 
-            var tour = await this.context.Tours.Include(i => i.Logs)
+            var tour = await this._context.Tours.Include(i => i.Logs)
                 .FirstOrDefaultAsync(i => i.TourId == TourId);
             if (tour == null) return BadRequest("Tour not found.");
             Logs findLog = null;
@@ -162,10 +107,10 @@ namespace TourPlannerAPI.Controllers
         }
         //DeleteLog
         [HttpDelete("DeleteLog/{TourId}/{LogId}")]
-        public async Task<ActionResult<Tours>> DeleteLog(Guid TourId, Guid LogId)
+        public async Task<ActionResult<List<PresentationLog>>> DeleteLog(Guid TourId, Guid LogId)
         {
 
-            var tour = await this.context.Tours.FindAsync(TourId);
+            var tour = await this._context.Tours.FindAsync(TourId);
             if (tour == null) return BadRequest("Tour not found.");
             Logs findLog = null;
             tour.Logs.ForEach(log =>
@@ -174,15 +119,15 @@ namespace TourPlannerAPI.Controllers
             });
             if (findLog == null) return BadRequest("Log not found.");
             tour.Logs.Remove(findLog);
-            await this.context.SaveChangesAsync();
-            return Ok((await this.context.Tours.FindAsync(TourId)).Logs);
+            await this._context.SaveChangesAsync();
+            return Ok((await this._context.Tours.FindAsync(TourId)).Logs);
         }
         //EditLog
         [HttpPut("EditLog/{TourId}/{LogId}")]
-        public async Task<ActionResult<Tours>> EditLog(Guid TourId, Guid LogId, Logs log)
+        public async Task<ActionResult<PresentationLog>> EditLog(Guid TourId, Guid LogId, SimpleLog log)
         {
 
-            var tour = await this.context.Tours.FindAsync(TourId);
+            var tour = await this._context.Tours.FindAsync(TourId);
             if (tour == null) return BadRequest("Tour not found.");
             Logs findLog = null;
             tour.Logs.ForEach(log =>
@@ -192,8 +137,8 @@ namespace TourPlannerAPI.Controllers
             if (findLog == null) return BadRequest("Log not found.");
             tour.Logs.Remove(findLog);
             tour.Logs.Add(log);
-            await this.context.SaveChangesAsync();
-            return Ok((await this.context.Tours.FindAsync(TourId)).Logs);
+            await this._context.SaveChangesAsync();
+            return Ok((await this._context.Tours.FindAsync(TourId)).Logs);
         }
     }
 }
