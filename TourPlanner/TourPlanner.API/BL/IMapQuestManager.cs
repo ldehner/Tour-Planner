@@ -1,8 +1,11 @@
-﻿namespace TourPlanner.API.BL
+﻿using TourPlanner.API.Mapping;
+
+namespace TourPlanner.API.BL
 {
     public interface IMapQuestManager
     {
-        public Task GetMapAsync();
+        public Task<MapQuestRouteResult> GetRouteAsync(string from, string to, string type);
+        public Task<byte[]> GetMapAsync(string sessionId);
         public Task SaveMapAsync();
     }
 }

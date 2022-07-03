@@ -1,4 +1,5 @@
-﻿using TourPlanner.Data;
+﻿using TourPlanner.API.Data;
+using TourPlanner.Data;
 
 namespace TourPlanner.API.Mapping
 {
@@ -12,6 +13,19 @@ namespace TourPlanner.API.Mapping
                 TourId = log.TourId,
                 Date = log.Date,
                 Duration = log.Duration,
+                Comment = log.Comment,
+                Difficulty = log.Difficulty,
+                Rating = log.Rating,
+            };
+        }
+
+        public static async Task<Logs> SimpleLogToLogs(SimpleLog log, Guid tourId)
+        {
+            return new Logs
+            {
+                TourId = tourId,
+                Date = log.Date,
+                Duration = log.Duration.TimeOfDay,
                 Comment = log.Comment,
                 Difficulty = log.Difficulty,
                 Rating = log.Rating,

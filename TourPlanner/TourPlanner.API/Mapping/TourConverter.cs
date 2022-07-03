@@ -7,14 +7,10 @@ namespace TourPlanner.API.Mapping
     {
         public async static Task<SimpleTour> ToursToSimpleTour(Tours tour)
         {
-            DateTime dt = new DateTime(2022, 01, 01);
-            dt = dt + tour.Duration;
             return new SimpleTour
             {
                 Name = tour.Name,
                 Description = tour.Description,
-                Duration = dt,
-                Distance = tour.Distance,
                 Type = tour.Type,
                 Start = tour.Start,
                 Destination = tour.Destination
@@ -44,8 +40,6 @@ namespace TourPlanner.API.Mapping
             {
                 Name = tour.Name,
                 Description = tour.Description,
-                Duration = dt,
-                Distance = tour.Distance,
                 Type = tour.Type,
                 Start = tour.Start,
                 Destination = tour.Destination,

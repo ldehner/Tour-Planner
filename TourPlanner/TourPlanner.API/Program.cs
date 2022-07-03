@@ -8,9 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var optionsBuilder = new DbContextOptionsBuilder<ToursDataContext>();
 optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("TourPlannerDb"));
-EFTourRepository tourRepository = new EFTourRepository(new ToursDataContext(optionsBuilder.Options));
-TourManager tourManager = new TourManager(tourRepository);
+var tourRepository = new EFTourRepository(new ToursDataContext(optionsBuilder.Options));
+var tourLogRepository = new EFTourLogRepository(new ToursDataContext(optionsBuilder.Options));
+var tourManager = new TourManager(tourRepository);
+var tourLogManager = new TourLogManager(tourLogRepository);
+var mapQuestManager = new MapQuestManager();
 builder.Services.Add(new ServiceDescriptor(typeof(ITourManager), tourManager));
+builder.Services.Add(new ServiceDescriptor(typeof(ITourLogManager), tourLogManager));
+builder.Services.Add(new ServiceDescriptor(typeof(IMapQuestManager), mapQuestManager));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

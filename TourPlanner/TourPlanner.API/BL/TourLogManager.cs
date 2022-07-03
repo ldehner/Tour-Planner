@@ -1,32 +1,39 @@
-﻿using TourPlanner.API.Data;
+﻿using TourPlanner.API.DAL;
+using TourPlanner.API.Data;
+using TourPlanner.API.Mapping;
 
 namespace TourPlanner.API.BL
 {
     public class TourLogManager : ITourLogManager
     {
-        public async Task<SimpleLog> AddLogAsync(SimpleLog log)
+        private readonly ITourLogRepository _tourLogRepository;
+        public TourLogManager(ITourLogRepository tourLogRepository)
         {
-            throw new NotImplementedException();
+            _tourLogRepository = tourLogRepository;
+        }
+        public async Task<PresentationTour> AddLogAsync(Guid TourId, SimpleLog log)
+        {
+            return await _tourLogRepository.AddLogAsync(TourId, log);
         }
 
-        public async Task DeleteLogAsync(Guid logId)
+        public async Task<PresentationTour> DeleteLogAsync(Guid tourId, Guid logId)
         {
-            throw new NotImplementedException();
+            return await _tourLogRepository.DeleteLogAsync(tourId, logId);
         }
 
-        public async Task<SimpleLog> GetLogAsync(Guid logId)
+        public async Task<PresentationLog> GetLogAsync(Guid tourId, Guid logId)
         {
-            throw new NotImplementedException();
+            return await _tourLogRepository.GetLogAsync(tourId, logId);
         }
 
-        public async Task<List<SimpleLog>> GetLogsAsync()
+        public async Task<List<PresentationLog>> GetLogsAsync(Guid tourId)
         {
-            throw new NotImplementedException();
+            return await _tourLogRepository.GetLogsAsync(tourId);
         }
 
-        public async Task<SimpleLog> UpdateLogAsync(Guid logId, SimpleLog log)
+        public async Task<List<PresentationLog>> UpdateLogAsync(Guid tourId, Guid logId, SimpleLog log)
         {
-            throw new NotImplementedException();
+            return await _tourLogRepository.UpdateLogAsync(tourId, logId, log);
         }
     }
 }

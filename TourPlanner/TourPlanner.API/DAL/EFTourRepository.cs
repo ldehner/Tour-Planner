@@ -10,6 +10,7 @@ using TourPlanner.API.BL;
 using TourPlanner.API.DAL;
 using TourPlanner.API.Data;
 using TourPlanner.Data;
+using TourPlanner.API.Exceptions;
 
 namespace TourPlanner.API.DAL
 {
@@ -18,13 +19,14 @@ namespace TourPlanner.API.DAL
         private readonly ToursDataContext _context;
         public EFTourRepository(ToursDataContext toursDataContext) { _context = toursDataContext; }
 
-        public async Task<PresentationTour> AddTourAsync(SimpleTour tour)
+        public async Task<PresentationTour> AddTourAsync(SimpleTour tour, double distance, TimeSpan duration)
         {
             Tours tours = new Tours()
             {
+                Name = tour.Name,
                 Description = tour.Description,
-                Distance = tour.Distance,
-                Duration = tour.Duration.TimeOfDay,
+                Distance = distance,
+                Duration = duration,
                 Type = tour.Type,
                 Start = tour.Start,
                 Destination = tour.Destination,
@@ -39,21 +41,18 @@ namespace TourPlanner.API.DAL
         public async Task<List<PresentationTour>> DeleteTourAsync(Guid tourId)
         {
             var tour = await this._context.Tours.FindAsync(tourId);
-            if (tour == null) return null;
+            if (tour is null) throw new TourNotFoundException();
             this._context.Tours.Remove(tour); 
             await this._context.SaveChangesAsync();
-            var tours = await this._context.Tours.ToListAsync();
-            var presentationTours = new List<PresentationTour>();
-            tours.ForEach(async tour => presentationTours.Add(await TourConverter.ToursToPresentationTour(tour)));
 
-            return (presentationTours);
+            return await GetToursAsync();
         }
 
         public async Task<PresentationTour> GetTourAsync(Guid tourId)
         {
             var tour = await this._context.Tours.Include(i => i.Logs)
                 .FirstOrDefaultAsync(i => i.TourId == tourId);
-            if (tour == null) return null;
+            if (tour is null) throw new TourNotFoundException();
             return await TourConverter.ToursToPresentationTour(tour);
         }
 
@@ -66,22 +65,22 @@ namespace TourPlanner.API.DAL
             return (presentationTours);
         }
 
-        public async Task<PresentationTour> UpdateTourAsync(Guid tourId, SimpleTour request)
+        public async Task<PresentationTour> UpdateTourAsync(Guid tourId, SimpleTour request, double distance, TimeSpan duration)
         {
             var tour = await this._context.Tours.Include(i => i.Logs)
                 .FirstOrDefaultAsync(i => i.TourId == tourId);
-            if (tour == null) return null;
+            if (tour is null) throw new TourNotFoundException();
             tour.Name = request.Name;
-            tour.Duration = request.Duration.TimeOfDay;
             tour.Start = request.Start;
+            tour.Distance = distance;
+            tour.Duration = duration;
             tour.Description = request.Description;
             tour.Destination = request.Destination;
             tour.Type = request.Type;
 
             await this._context.SaveChangesAsync();
 
-            return await TourConverter.ToursToPresentationTour(await _context.Tours.Include(i => i.Logs)
-                .FirstOrDefaultAsync(i => i.TourId == tourId)); 
+            return await GetTourAsync(tourId); 
         }
     }
 }

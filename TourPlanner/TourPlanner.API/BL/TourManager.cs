@@ -1,5 +1,6 @@
 ﻿using TourPlanner.API.DAL;
 using TourPlanner.API.Data;
+using TourPlanner.API.Exceptions;
 using TourPlanner.API.Mapping;
 
 namespace TourPlanner.API.BL
@@ -12,19 +13,20 @@ namespace TourPlanner.API.BL
             _tourRepository = tourRepository;
         }
 
-        public async Task<PresentationTour> AddTourAsync(SimpleTour tour)
+        public async Task<PresentationTour> AddTourAsync(SimpleTour tour, double distance, TimeSpan duration)
         {
-            return await _tourRepository.AddTourAsync(tour);
+            return await _tourRepository.AddTourAsync(tour, distance, duration);
         }
 
         public async Task<List<PresentationTour>> DeleteTourAsync(Guid tourId)
         {
             return await _tourRepository.DeleteTourAsync(tourId);
+
         }
 
         public async Task<PresentationTour> GetTourAsync(Guid tourId)
         {
-            return await _tourRepository.GetTourAsync(tourId);
+           return await _tourRepository.GetTourAsync(tourId);
         }
 
         public async Task<List<PresentationTour>> GetToursAsync()
@@ -32,9 +34,9 @@ namespace TourPlanner.API.BL
             return await _tourRepository.GetToursAsync();
         }
 
-        public async Task<PresentationTour> UpdateTourAsync(Guid tourId, SimpleTour tour)
+        public async Task<PresentationTour> UpdateTourAsync(Guid tourId, SimpleTour requestTour, double distance, TimeSpan duration)
         {
-            return await _tourRepository.UpdateTourAsync(tourId, tour);
+            return await _tourRepository.UpdateTourAsync(tourId, requestTour, distance, duration); ;
         }
     }
 }
