@@ -1,12 +1,25 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Dynamic;
+using TourPlanner.API.DAL;
 using TourPlanner.API.Mapping;
 
 namespace TourPlanner.API.BL
 {
     public class MapQuestManager : IMapQuestManager
     {
+        private readonly IMapQuestRepository _mapQuestRepository;
+
+        public MapQuestManager(IMapQuestRepository mapQuestRepository)
+        {
+            _mapQuestRepository = mapQuestRepository;
+        }
+
+        public async Task DeleteMapAsync(Guid TourId)
+        {
+            await _mapQuestRepository.DeletePicture(TourId);
+        }
+
         public async Task<byte[]> GetMapAsync(string sessionId)
         {
             HttpClient HttpClient = new();
@@ -25,9 +38,20 @@ namespace TourPlanner.API.BL
             return new MapQuestRouteResult(json.route.distance, new TimeSpan(int.Parse(timeArray[0]), int.Parse(timeArray[1]), int.Parse(timeArray[2])) ,json.route.sessionId);
         }
 
-        public Task SaveMapAsync()
+        public async Task<byte[]> LoadMapAsync(Guid TourId)
         {
-            throw new NotImplementedException();
+            return await _mapQuestRepository.GetPicture(TourId);
+        }
+
+        public async Task SaveMapAsync(Guid mapId, byte[] image)
+        {
+            await _mapQuestRepository.SavePicture(mapId, image);
+        }
+
+        public async Task UpdateMapAsync(Guid mapId, byte[] image)
+        {
+            await DeleteMapAsync(mapId);
+            await SaveMapAsync(mapId, image);
         }
     }
 }

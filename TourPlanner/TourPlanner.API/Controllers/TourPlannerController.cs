@@ -52,10 +52,13 @@ namespace TourPlannerAPI.Controllers
         }
 
         [HttpPost("AddTour")]
-        public async Task<ActionResult<List<PresentationTour>>> AddTour(SimpleTour tour)
+        public async Task<ActionResult<PresentationTour>> AddTour(SimpleTour tour)
         {
             var result = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, "fastest");
-            return Ok(await _tourManager.AddTourAsync(tour, result.Distance, result.Time));
+            var map = await _mapQuestManager.GetMapAsync(result.SessionId);
+            var presentation = await _tourManager.AddTourAsync(tour, result.Distance, result.Time);
+            await _mapQuestManager.SaveMapAsync(presentation.TourId, map);
+            return Ok(presentation);
         }
         //DeleteTour
         [HttpDelete("DeleteTour/{TourId}")]
@@ -64,6 +67,7 @@ namespace TourPlannerAPI.Controllers
             try
             {
                 var result = await _tourManager.DeleteTourAsync(TourId);
+                await _mapQuestManager.DeleteMapAsync(TourId);
                 return Ok(result);
             }catch(TourNotFoundException)
             {
@@ -74,11 +78,14 @@ namespace TourPlannerAPI.Controllers
         [HttpPut("UpdateTour/{TourId}")]
         public async Task<ActionResult<PresentationTour>> UpdateTour(Guid TourId, SimpleTour request)
         {
-            var mapquest = await _mapQuestManager.GetRouteAsync(request.Start, request.Destination, "fastest");
+            var result = await _mapQuestManager.GetRouteAsync(request.Start, request.Destination, "fastest");
+            var map = await _mapQuestManager.GetMapAsync(result.SessionId);
+            
             try
             {
-                var result = await _tourManager.UpdateTourAsync(TourId, request, mapquest.Distance, mapquest.Time);
-                return Ok(result);
+                var presentation = await _tourManager.UpdateTourAsync(TourId, request, result.Distance, result.Time);
+                await _mapQuestManager.UpdateMapAsync(presentation.TourId, map);
+                return Ok(presentation);
             }
             catch (TourNotFoundException)
             {
@@ -152,6 +159,12 @@ namespace TourPlannerAPI.Controllers
             {
                 return BadRequest("Log not found");
             }
+        }
+
+        [HttpGet("GetMap/{TourId}")]
+        public async Task<ActionResult<byte[]>> GetMap(Guid TourId)
+        {
+            return Ok(await _mapQuestManager.LoadMapAsync(TourId));
         }
 
     }

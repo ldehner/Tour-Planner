@@ -11,7 +11,7 @@
         /// <param name="mapId">the id of the map</param>
         /// <param name="image">the image of the map</param>
         /// <returns></returns>
-        public Boolean AddPicture(Guid mapId, string image);
+        public Boolean SavePicture(Guid mapId, string image);
         /// <summary>
         /// Updates an existing map
         /// </summary>
