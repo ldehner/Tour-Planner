@@ -34,6 +34,11 @@ namespace TourPlanner.API.BL
             return await _tourRepository.GetToursAsync();
         }
 
+        public async Task<List<PresentationTour>> SearchAsync(string searchTerm)
+        {
+            return await _tourRepository.SearchAsync(searchTerm);
+        }
+
         public async Task<PresentationTour> UpdateTourAsync(Guid tourId, SimpleTour requestTour, double distance, TimeSpan duration)
         {
             return await _tourRepository.UpdateTourAsync(tourId, requestTour, distance, duration); ;

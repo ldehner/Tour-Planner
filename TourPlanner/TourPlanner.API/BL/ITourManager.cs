@@ -14,5 +14,7 @@ namespace TourPlanner.API.BL
         public Task<PresentationTour> UpdateTourAsync(Guid tourId, SimpleTour requestTour, double distance, TimeSpan duration);
 
         public Task<List<PresentationTour>> DeleteTourAsync(Guid tourId);
+
+        public Task<List<PresentationTour>> SearchAsync(string searchTerm);
     }
 }

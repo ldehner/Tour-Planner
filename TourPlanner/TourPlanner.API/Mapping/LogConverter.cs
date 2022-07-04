@@ -35,7 +35,7 @@ namespace TourPlanner.API.Mapping
         public static async Task<List<PresentationLog>> LogsListToPresentationLogList(List<Logs> logs)
         {
             var list = new List<PresentationLog>();
-            if(logs.Count > 0) logs.ForEach(async log => list.Add(await LogsToPresentationLog(log)));
+            if(logs is not null && logs.Count > 0) logs.ForEach(async log => list.Add(await LogsToPresentationLog(log)));
             return list;
         }
 

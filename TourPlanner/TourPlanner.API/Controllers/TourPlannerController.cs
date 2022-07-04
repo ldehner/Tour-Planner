@@ -167,5 +167,11 @@ namespace TourPlannerAPI.Controllers
             return Ok(await _mapQuestManager.LoadMapAsync(TourId));
         }
 
+        [HttpGet("search/{searchTerm}")]
+        public async Task<ActionResult<List<PresentationTour>>> SearchTours(string searchTerm)
+        {
+            return Ok(await _tourManager.SearchAsync(searchTerm.ToUpper()));
+        }
+
     }
 }
