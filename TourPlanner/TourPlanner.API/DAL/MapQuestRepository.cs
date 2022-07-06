@@ -6,6 +6,12 @@ namespace TourPlanner.API.DAL
 {
     public class MapQuestRepository : IMapQuestRepository
     {
+        private readonly string _path;
+        public MapQuestRepository(string path)
+        {
+            _path = path;
+        }
+
         /// <summary>
         /// Adds a new picture into the file system
         /// </summary>
@@ -16,7 +22,7 @@ namespace TourPlanner.API.DAL
             ImageConverter _imageConverter = new ImageConverter();
             MemoryStream ms = new MemoryStream(image);
             Image i = Image.FromStream(ms);
-            i.Save(System.IO.Directory.GetCurrentDirectory()+"/maps/" + mapId.ToString() + ".jpg");
+            i.Save(_path + mapId.ToString() + ".jpg");
         }
 
 
@@ -26,15 +32,15 @@ namespace TourPlanner.API.DAL
         /// <param name="mapId">the id of the map</param>
         /// <returns></returns>
         public async Task DeletePicture(Guid mapId) {
-            if (File.Exists(System.IO.Directory.GetCurrentDirectory() + "/maps/" + mapId.ToString() + ".jpg"))
+            if (File.Exists(_path + mapId.ToString() + ".jpg"))
             {
-                File.Delete(System.IO.Directory.GetCurrentDirectory() + "/maps/" + mapId.ToString() + ".jpg");
+                File.Delete(_path + mapId.ToString() + ".jpg");
             }
         }
 
         public async Task<byte[]> GetPicture(Guid mapId)
         {
-            return await File.ReadAllBytesAsync(System.IO.Directory.GetCurrentDirectory() + "/maps/" + mapId.ToString() + ".jpg");
+            return await File.ReadAllBytesAsync(_path + mapId.ToString() + ".jpg");
         }
     }
 }

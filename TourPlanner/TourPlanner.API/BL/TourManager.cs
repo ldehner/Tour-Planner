@@ -13,9 +13,11 @@ namespace TourPlanner.API.BL
     public class TourManager : ITourManager
     {
         private readonly ITourRepository _tourRepository;
-        public TourManager(ITourRepository tourRepository)
+        private readonly IPdfTemplateRepository _pdfTemplateRepository;
+        public TourManager(ITourRepository tourRepository, IPdfTemplateRepository pdfTemplateRepository)
         {
             _tourRepository = tourRepository;
+            _pdfTemplateRepository = pdfTemplateRepository;
         }
 
         public async Task<PresentationTour> AddTourAsync(SimpleTour tour, double distance, TimeSpan duration)
@@ -37,7 +39,7 @@ namespace TourPlanner.API.BL
 
         public async Task<byte[]> GenerateTourReportAsync(Guid tourId)
         {
-            string templateHtml = File.ReadAllText(System.IO.Directory.GetCurrentDirectory()+"/TourReport.html");
+            string templateHtml = await _pdfTemplateRepository.GetTourDetailTemplateAsync();
             var template = Handlebars.Compile(templateHtml);
             var tour = await GetTourAsync(tourId);
             var tourLogs = new List<PdfLog>();
@@ -81,7 +83,7 @@ namespace TourPlanner.API.BL
         public async Task<byte[]> GenerateTourOverviewAsync()
         {
            
-            string templateHtml = File.ReadAllText(System.IO.Directory.GetCurrentDirectory() + "/AllToursReport.html");
+            string templateHtml = await _pdfTemplateRepository.GetTourOverviewTemplateAsync();
             var template = Handlebars.Compile(templateHtml);
             var tours = await GetToursAsync();
             var pdfTours = new List<PdfTourOverview>();
@@ -106,14 +108,14 @@ namespace TourPlanner.API.BL
                         tourId = tour.TourId.ToString(),
                         entrys = tour.Logs.Count().ToString(),
                         distance = Math.Round(tour.Distance, 1).ToString(),
-                        duration = tour.Duration.ToString(@"hh\:mm\:ss"),
+                        duration = tour.Duration.ToString(@"d\:hh\:mm"),
                         transport = tour.Type,
                         description = tour.Description,
                         from = tour.Start,
                         to = tour.Destination,
                         difficulty = difficulty.ToString(),
                         rating = rating.ToString(),
-                        avgduration = avgtime.ToString(@"hh\:mm\:ss"),
+                        avgduration = avgtime.ToString(@"d\:hh\:mm"),
                         baseUrl = System.IO.Directory.GetCurrentDirectory()
                     });
                 }
@@ -125,7 +127,7 @@ namespace TourPlanner.API.BL
                         entrys = tour.Logs.Count().ToString(),
                         tourId = tour.TourId.ToString(),
                         distance = Math.Round(tour.Distance, 1).ToString(),
-                        duration = tour.Duration.ToString(@"hh\:mm\:ss"),
+                        duration = tour.Duration.ToString(@"d\:hh\:mm"),
                         transport = tour.Type,
                         description = tour.Description,
                         from = tour.Start,
