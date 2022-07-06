@@ -4,10 +4,10 @@ using System.Drawing.Imaging;
 namespace TourPlanner.API.DAL
 
 {
-    public class MapQuestRepository : IMapQuestRepository
+    public class FileMapRepository : IMapRepository
     {
         private readonly string _path;
-        public MapQuestRepository(string path)
+        public FileMapRepository(string path)
         {
             _path = path;
         }

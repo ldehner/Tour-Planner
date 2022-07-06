@@ -1,6 +1,6 @@
 ﻿namespace TourPlanner.API.DAL
 {
-    public interface IMapQuestRepository
+    public interface IMapRepository
     {
         /// <summary>
         /// Adds a new picture into the file system
