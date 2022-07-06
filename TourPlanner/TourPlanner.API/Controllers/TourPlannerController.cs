@@ -27,7 +27,6 @@ namespace TourPlannerAPI.Controllers
         public TourPlannerController(ILogger<TourPlannerController> logger, ITourManager tourManager, ITourLogManager tourLogManager, IMapQuestManager mapQuestManager)
         {
             _logger = logger;
-            logger.LogWarning("This is a MEL warning on the privacy page");
             _tourManager = tourManager;
             _tourLogManager = tourLogManager;
             _mapQuestManager = mapQuestManager;
@@ -35,12 +34,14 @@ namespace TourPlannerAPI.Controllers
         [HttpGet("GetTours")]
         public async Task<ActionResult<List<PresentationTour>>> Get()
         {
+            _logger.LogInformation("API Request - Get all tours");
             return Ok(await _tourManager.GetToursAsync());
         }
 
         [HttpGet("GetTours/{TourId}")]
         public async Task<ActionResult<PresentationTour>> Get(Guid TourId)
         {
+            _logger.LogInformation("API Request - Get tour "+ TourId.ToString());
             try
             {
                 var result = await _tourManager.GetTourAsync(TourId);
@@ -48,6 +49,7 @@ namespace TourPlannerAPI.Controllers
             }
             catch (TourNotFoundException)
             {
+                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
                 return BadRequest("Tour not found");
             }
         }
@@ -55,6 +57,7 @@ namespace TourPlannerAPI.Controllers
         [HttpPost("AddTour")]
         public async Task<ActionResult<PresentationTour>> AddTour(SimpleTour tour)
         {
+            _logger.LogInformation("API Request - Add new tour");
             var result = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, tour.Type);
             var map = await _mapQuestManager.GetMapAsync(result.SessionId);
             var presentation = await _tourManager.AddTourAsync(tour, result.Distance, result.Time);
@@ -65,6 +68,7 @@ namespace TourPlannerAPI.Controllers
         [HttpDelete("DeleteTour/{TourId}")]
         public async Task<ActionResult<List<PresentationTour>>> DeleteTour(Guid TourId)
         {
+            _logger.LogInformation("API Request - Delete tour " + TourId.ToString());
             try
             {
                 var result = await _tourManager.DeleteTourAsync(TourId);
@@ -72,6 +76,7 @@ namespace TourPlannerAPI.Controllers
                 return Ok(result);
             }catch(TourNotFoundException)
             {
+                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
                 return BadRequest("Tour not found");
             }
         }
@@ -79,6 +84,7 @@ namespace TourPlannerAPI.Controllers
         [HttpPut("UpdateTour/{TourId}")]
         public async Task<ActionResult<PresentationTour>> UpdateTour(Guid TourId, SimpleTour request)
         {
+            _logger.LogInformation("API Request - Update tour " + TourId.ToString());
             var result = await _mapQuestManager.GetRouteAsync(request.Start, request.Destination, "fastest");
             var map = await _mapQuestManager.GetMapAsync(result.SessionId);
             
@@ -90,6 +96,7 @@ namespace TourPlannerAPI.Controllers
             }
             catch (TourNotFoundException)
             {
+                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
                 return BadRequest("Tour not found");
             }
         }
@@ -97,6 +104,7 @@ namespace TourPlannerAPI.Controllers
         [HttpPost("AddLog/{TourId}")]
         public async Task<ActionResult<PresentationTour>> AddLog(Guid TourId, SimpleLog log)
         {
+            _logger.LogInformation("API Request - Add log to tour " + TourId.ToString());
             try
             {
                 var result = await _tourLogManager.AddLogAsync(TourId, log);
@@ -104,7 +112,7 @@ namespace TourPlannerAPI.Controllers
             }
             catch (TourNotFoundException)
             {
-
+                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
                 return BadRequest("Tour not found");
             }
         }
@@ -113,6 +121,7 @@ namespace TourPlannerAPI.Controllers
         [HttpGet("GetLogs/{TourId}")]
         public async Task<ActionResult<List<PresentationLog>>> GetLogs(Guid TourId)
         {
+            _logger.LogInformation("API Request - Get all logs of tour " + TourId.ToString());
             try
             {
                 var result = await _tourLogManager.GetLogsAsync(TourId);
@@ -120,7 +129,7 @@ namespace TourPlannerAPI.Controllers
             }
             catch (TourNotFoundException)
             {
-
+                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
                 return BadRequest("Tour not found");
             }
 
@@ -129,6 +138,7 @@ namespace TourPlannerAPI.Controllers
         [HttpGet("GetLogs/{TourId}/{LogId}")]
         public async Task<ActionResult<PresentationLog>> GetLog(Guid TourId, Guid LogId)
         {
+            _logger.LogInformation("API Request - Get log " +LogId.ToString() +" of tour "+ TourId.ToString());
             try
             {
                 var result = await _tourLogManager.GetLogAsync(TourId, LogId);
@@ -136,10 +146,12 @@ namespace TourPlannerAPI.Controllers
             }
             catch (TourNotFoundException)
             {
+                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
                 return BadRequest("Tour not found");
             }
             catch (LogNotFoundException)
             {
+                _logger.LogInformation("Requested log " + LogId.ToString() + " not found in tour " + TourId.ToString());
                 return BadRequest("Log not found");
             }
         }
@@ -147,6 +159,7 @@ namespace TourPlannerAPI.Controllers
         [HttpDelete("DeleteLog/{TourId}/{LogId}")]
         public async Task<ActionResult<List<PresentationLog>>> DeleteLog(Guid TourId, Guid LogId)
         {
+            _logger.LogInformation("API Request - Delete log " + LogId.ToString() + " of tour " + TourId.ToString());
             try
             {
                 var result = await _tourLogManager.DeleteLogAsync(TourId, LogId);
@@ -154,10 +167,12 @@ namespace TourPlannerAPI.Controllers
             }
             catch (TourNotFoundException)
             {
+                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
                 return BadRequest("Tour not found");
             }
             catch (LogNotFoundException)
             {
+                _logger.LogInformation("Requested log " + LogId.ToString() + " not found in tour " + TourId.ToString());
                 return BadRequest("Log not found");
             }
         }
@@ -165,30 +180,35 @@ namespace TourPlannerAPI.Controllers
         [HttpGet("GetMap/{TourId}")]
         public async Task<ActionResult<byte[]>> GetMap(Guid TourId)
         {
+            _logger.LogInformation("API Request - Get map of tour " + TourId.ToString());
             return Ok(await _mapQuestManager.LoadMapAsync(TourId));
         }
 
         [HttpGet("TourReport/{TourId}")]
         public async Task<ActionResult<byte[]>> RouteReport(Guid TourId)
         {
+            _logger.LogInformation("API Request - Generate report of tour " + TourId.ToString());
             return Ok(await _tourManager.GenerateTourReportAsync(TourId));
         }
 
         [HttpGet("TourOverviewReport")]
         public async Task<ActionResult<byte[]>> TourOverviewReport()
         {
+            _logger.LogInformation("API Request - Generate tour overview report");
             return Ok(await _tourManager.GenerateTourOverviewAsync());
         }
 
         [HttpGet("search/{searchTerm}")]
         public async Task<ActionResult<List<PresentationTour>>> SearchTours(string searchTerm)
         {
+            _logger.LogInformation("API Request - Search for term " + searchTerm);
             return Ok(await _tourManager.SearchAsync(searchTerm.ToUpper()));
         }
 
         [HttpGet("export/{TourId}")]
         public async Task<ActionResult<string>> ExportTour(Guid TourId)
         {
+            _logger.LogInformation("API Request - Export tour " + TourId.ToString());
             try
             {
                 var result = await _tourManager.ExportTourAsync(TourId);
@@ -196,6 +216,7 @@ namespace TourPlannerAPI.Controllers
             }
             catch (TourNotFoundException)
             {
+                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
                 return BadRequest("Tour not found");
             }
             
@@ -203,6 +224,7 @@ namespace TourPlannerAPI.Controllers
         [HttpPost("import")]
         public async Task<ActionResult<PresentationTour>> ImportTour(PresentationTour tour)
         {
+            _logger.LogInformation("API Request - Import tour " + tour.TourId.ToString());
             try
             {
                 var route = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, tour.Type);
@@ -215,6 +237,7 @@ namespace TourPlannerAPI.Controllers
             }
             catch (TourAlreadyExistsException)
             {
+                _logger.LogInformation("Tour " + tour.TourId.ToString() + " already exists");
                 return BadRequest("Tour already exists");
             }
         }
