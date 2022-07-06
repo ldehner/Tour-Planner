@@ -37,7 +37,14 @@ namespace TourPlannerAPI.Controllers
             _logger.LogInformation("API Request - Get all tours");
             return Ok(await _tourManager.GetToursAsync());
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TourId"></param>
+        /// <response code="200">Tour returned</response>
+        /// <response code="400">Tour could not be found</response>
+        /// <response code="500">Oops! Problem on our end</response>
+        /// <returns></returns>
         [HttpGet("GetTours/{TourId}")]
         public async Task<ActionResult<PresentationTour>> Get(Guid TourId)
         {
@@ -50,7 +57,7 @@ namespace TourPlannerAPI.Controllers
             catch (TourNotFoundException)
             {
                 _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
-                return BadRequest("Tour not found");
+                return NotFound("Tour not found");
             }
         }
 
