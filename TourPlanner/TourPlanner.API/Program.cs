@@ -2,9 +2,10 @@ using TourPlanner.Data;
 using Microsoft.EntityFrameworkCore;
 using TourPlanner.API.BL;
 using TourPlanner.API.DAL;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Logging.AddLog4Net("log4net.config");
 // Add services to the container.
 var optionsBuilder = new DbContextOptionsBuilder<ToursDataContext>();
 optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("TourPlannerDb"));
@@ -18,13 +19,10 @@ var mapQuestManager = new MapQuestManager(mapQuestRepository, builder.Configurat
 builder.Services.Add(new ServiceDescriptor(typeof(ITourManager), tourManager));
 builder.Services.Add(new ServiceDescriptor(typeof(ITourLogManager), tourLogManager));
 builder.Services.Add(new ServiceDescriptor(typeof(IMapQuestManager), mapQuestManager));
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ToursDataContext>(
-    o => o.UseNpgsql(builder.Configuration.GetConnectionString("TourPlannerDb")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

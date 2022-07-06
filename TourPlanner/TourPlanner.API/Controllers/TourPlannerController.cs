@@ -19,14 +19,15 @@ namespace TourPlannerAPI.Controllers
     [ApiController]
     public class TourPlannerController : ControllerBase
     {
-        private readonly ToursDataContext _context;
         private readonly ITourManager _tourManager;
         private readonly ITourLogManager _tourLogManager;
         private readonly IMapQuestManager _mapQuestManager;
+        private readonly ILogger<TourPlannerController> _logger;
 
-        public TourPlannerController(ToursDataContext context, ITourManager tourManager, ITourLogManager tourLogManager, IMapQuestManager mapQuestManager)
+        public TourPlannerController(ILogger<TourPlannerController> logger, ITourManager tourManager, ITourLogManager tourLogManager, IMapQuestManager mapQuestManager)
         {
-            _context = context;
+            _logger = logger;
+            logger.LogWarning("This is a MEL warning on the privacy page");
             _tourManager = tourManager;
             _tourLogManager = tourLogManager;
             _mapQuestManager = mapQuestManager;

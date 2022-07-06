@@ -26,6 +26,7 @@ namespace TourPlanner.API.BL
         {
             HttpClient HttpClient = new();
             var result = await HttpClient.GetAsync("https://www.mapquestapi.com/staticmap/v5/map?key=" + _apiKey + " + &session=" + sessionId + "&routeArc=true&size=@2x");
+            HttpClient.Dispose();
             return await result.Content.ReadAsByteArrayAsync();
         }
 
@@ -34,6 +35,7 @@ namespace TourPlanner.API.BL
             HttpClient HttpClient = new();
             var result = await HttpClient.GetAsync("https://www.mapquestapi.com/directions/v2/route" + "?key=" + _apiKey + "&from=" + from + "&to=" + to + "&routeType=" + type + "&unit=k");
             var content = await result.Content.ReadAsStringAsync();
+            HttpClient.Dispose();
             dynamic json = JsonConvert.DeserializeObject<ExpandoObject>(content, new ExpandoObjectConverter());
             string time = json.route.formattedTime;
             var timeArray = time.Split(":");
