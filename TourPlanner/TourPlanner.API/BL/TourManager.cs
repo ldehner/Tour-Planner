@@ -37,27 +37,28 @@ namespace TourPlanner.API.BL
 
         public async Task<byte[]> GenerateTourReportAsync(Guid tourId)
         {
-            string templateHtml = File.ReadAllText(@"C:\Users\linus\Documents\FH\Tour-Planner\TourPlanner\TourPlanner.API\TourReport.html");
+            string templateHtml = File.ReadAllText(System.IO.Directory.GetCurrentDirectory()+"/TourReport.html");
             var template = Handlebars.Compile(templateHtml);
             var tour = await GetTourAsync(tourId);
             var tourLogs = new List<PdfLog>();
             tour.Logs.ForEach(log => tourLogs.Add(new PdfLog
             {
                 Date = log.Date.ToShortDateString(),
-                Duration = log.Duration.Hours + ":" + log.Duration.Minutes,
+                Duration = log.Duration.ToString(@"hh\:mm\:ss"),
                 Comment = log.Comment,
                 Rating = log.Rating,
                 Difficulty = log.Difficulty
             }));
-
+            string url = System.IO.Directory.GetCurrentDirectory();
             var data = new
             {
+                baseUrl = url,
                 name = tour.Name,
                 tourId = tour.TourId,
                 transport = tour.Type,
                 from = tour.Start,
                 distance = Math.Round(tour.Distance, 1),
-                duration = tour.Duration,
+                duration = tour.Duration.ToString(@"hh\:mm\:ss"),
                 to = tour.Destination,
                 description = tour.Description,
                 logs = tourLogs
@@ -67,7 +68,85 @@ namespace TourPlanner.API.BL
 
             ConverterProperties converterProperties = new ConverterProperties();
 
-            //string file = @"C:\Users\linus\Documents\FH\Tour-Planner\TourPlanner\" + tour.TourId.ToString() + ".pdf";
+            //string file = System.IO.Directory.GetCurrentDirectory()+"/" + tour.TourId.ToString() + ".pdf";
+            var stream = new MemoryStream();
+            PdfWriter writer = new PdfWriter(stream);
+            PdfDocument pdf = new PdfDocument(writer);
+            pdf.SetDefaultPageSize(PageSize.A4);
+            var document = HtmlConverter.ConvertToDocument(tourHtml, pdf, converterProperties);
+            document.Close();
+            return stream.ToArray();
+        }
+
+        public async Task<byte[]> GenerateTourOverviewAsync()
+        {
+           
+            string templateHtml = File.ReadAllText(System.IO.Directory.GetCurrentDirectory() + "/AllToursReport.html");
+            var template = Handlebars.Compile(templateHtml);
+            var tours = await GetToursAsync();
+            var pdfTours = new List<PdfTourOverview>();
+            tours.ForEach(tour => {
+                var times = new List<TimeSpan>();
+                var rating = 0.0;
+                var difficulty = 0.0;
+                tour.Logs.ForEach(log =>
+                {
+                    times.Add(log.Duration);
+                    rating += log.Rating;
+                    difficulty += log.Difficulty;
+                });
+                if(tour.Logs.Count > 0)
+                {
+                    var avgtime = new TimeSpan(Convert.ToInt64(times.Average(t => t.Ticks)));
+                    rating = Math.Round(rating / tour.Logs.Count(), 1);
+                    difficulty = Math.Round(difficulty / tour.Logs.Count(), 1);
+                    pdfTours.Add(new PdfTourOverview
+                    {
+                        name = tour.Name,
+                        tourId = tour.TourId.ToString(),
+                        entrys = tour.Logs.Count().ToString(),
+                        distance = Math.Round(tour.Distance, 1).ToString(),
+                        duration = tour.Duration.ToString(@"hh\:mm\:ss"),
+                        transport = tour.Type,
+                        description = tour.Description,
+                        from = tour.Start,
+                        to = tour.Destination,
+                        difficulty = difficulty.ToString(),
+                        rating = rating.ToString(),
+                        avgduration = avgtime.ToString(@"hh\:mm\:ss"),
+                        baseUrl = System.IO.Directory.GetCurrentDirectory()
+                    });
+                }
+                else
+                {
+                    pdfTours.Add(new PdfTourOverview
+                    {
+                        name = tour.Name,
+                        entrys = tour.Logs.Count().ToString(),
+                        tourId = tour.TourId.ToString(),
+                        distance = Math.Round(tour.Distance, 1).ToString(),
+                        duration = tour.Duration.ToString(@"hh\:mm\:ss"),
+                        transport = tour.Type,
+                        description = tour.Description,
+                        from = tour.Start,
+                        to = tour.Destination,
+                        difficulty = "-",
+                        rating = "-",
+                        avgduration = "-",
+                        baseUrl = System.IO.Directory.GetCurrentDirectory()
+                    }); 
+                }
+            });
+            var data = new
+            {
+                tours = pdfTours
+            };
+
+            string tourHtml = template(data);
+
+            ConverterProperties converterProperties = new ConverterProperties();
+
+            //string file = System.IO.Directory.GetCurrentDirectory() + "/AllTours.pdf";
             var stream = new MemoryStream();
             PdfWriter writer = new PdfWriter(stream);
             PdfDocument pdf = new PdfDocument(writer);

@@ -16,7 +16,7 @@ namespace TourPlanner.API.DAL
             ImageConverter _imageConverter = new ImageConverter();
             MemoryStream ms = new MemoryStream(image);
             Image i = Image.FromStream(ms);
-            i.Save("../maps/" + mapId.ToString() + ".jpg");
+            i.Save(System.IO.Directory.GetCurrentDirectory()+"/maps/" + mapId.ToString() + ".jpg");
         }
 
 
@@ -26,15 +26,15 @@ namespace TourPlanner.API.DAL
         /// <param name="mapId">the id of the map</param>
         /// <returns></returns>
         public async Task DeletePicture(Guid mapId) {
-            if (File.Exists("../maps/" + mapId.ToString() + ".jpg"))
+            if (File.Exists(System.IO.Directory.GetCurrentDirectory() + "/maps/" + mapId.ToString() + ".jpg"))
             {
-                File.Delete("../maps/" + mapId.ToString() + ".jpg");
+                File.Delete(System.IO.Directory.GetCurrentDirectory() + "/maps/" + mapId.ToString() + ".jpg");
             }
         }
 
         public async Task<byte[]> GetPicture(Guid mapId)
         {
-            return await File.ReadAllBytesAsync("../maps/" + mapId.ToString() + ".map");
+            return await File.ReadAllBytesAsync(System.IO.Directory.GetCurrentDirectory() + "/maps/" + mapId.ToString() + ".jpg");
         }
     }
 }

@@ -17,7 +17,7 @@ namespace TourPlanner.API.BL
 
         public Task<List<PresentationTour>> SearchAsync(string searchTerm);
         public Task<byte[]> GenerateTourReportAsync(Guid tourId);
-
+        public Task<byte[]> GenerateTourOverviewAsync();
         public Task<string> ExportTourAsync(Guid tourId);
         public Task<PresentationTour> ImportTourAsync(PresentationTour tour);
     }

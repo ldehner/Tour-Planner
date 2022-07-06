@@ -173,6 +173,12 @@ namespace TourPlannerAPI.Controllers
             return Ok(await _tourManager.GenerateTourReportAsync(TourId));
         }
 
+        [HttpGet("TourOverviewReport")]
+        public async Task<ActionResult<byte[]>> TourOverviewReport()
+        {
+            return Ok(await _tourManager.GenerateTourOverviewAsync());
+        }
+
         [HttpGet("search/{searchTerm}")]
         public async Task<ActionResult<List<PresentationTour>>> SearchTours(string searchTerm)
         {
@@ -191,6 +197,7 @@ namespace TourPlannerAPI.Controllers
             {
                 return BadRequest("Tour not found");
             }
+            
         }
         [HttpPost("import")]
         public async Task<ActionResult<PresentationTour>> ImportTour(PresentationTour tour)

@@ -14,69 +14,80 @@
   <body style="font-family: 'Roboto', sans-serif;">
       <div style="width: 100%; padding: 10px; background-color: lightskyblue"><h1 style="font-size: 16pt; padding: 0; margin: 0">Tour Planner</h1></div>
       <div class="container" style="padding: 0; margin: 0; width: 100%">
-          <div class="row" style="padding: 0; margin: 0">
-              <div class="col s5" style="padding: 0; margin: 0">
-                  <img src="C:/Users/linus/Documents/FH/Tour-Planner/TourPlanner/maps/{{tourId}}.jpg" width="100%" />
-              </div>
-              <div class="col s7" style="padding: 0; margin: 0; padding-left: 15px; padding-top: 10px">
+          {{#each tours}}
+          <div class="row" style="padding: 0; margin: 0; width: 100%; height: 100%; margin-top: 20px; margin-bottom: 10px; page-break-inside: avoid;">
+              <div class="col s12 z-depth-3" style="padding: 20px; margin: 0; width: 100%">
                   <div class="container" style="padding: 0; margin: 0; width: 100%">
                       <div class="row" style="padding: 0; margin: 0">
                           <div class="col s12" style="padding: 0; margin: 0"><span style="font-size: 14pt; font-weight: 400 ">{{ name }}</span></div>
                       </div>
+                      <div class="row" style="padding: 0; margin: 0">
+                          <div class="col s4" style="padding: 0; margin: 0">
+                              <img src="{{baseUrl}}/maps/{{tourId}}.jpg" width="100%" />
+                          </div>
+                          <div class="col s8" style="padding: 0; margin: 0; padding-left: 20px">
+                              <div class="container" style="padding: 0; margin: 0; width: 100%">
 
-                      <div class="row" style="padding: 0; margin: 0">
-                          <div class="col s3" style="padding: 0; margin: 0"><span style="font-weight: 400 ">From:</span></div>
-                          <div class="col s9" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ from }}</span></div>
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s3" style="padding: 0; margin: 0"><span style="font-weight: 400 ">From:</span></div>
+                                      <div class="col s9" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ from }}</span></div>
+                                  </div>
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s3" style="padding: 0; margin: 0"><span style="font-weight: 400 ">To:</span></div>
+                                      <div class="col s9" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ to }}</span></div>
+                                  </div>
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s3" style="padding: 0; margin: 0"><span style="font-weight: 400">Type:</span></div>
+                                      <div class="col s9" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ transport }}</span></div>
+                                  </div>
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s3" style="padding: 0; margin: 0"><span style="font-weight: 400 ">Distance:</span></div>
+                                      <div class="col s9" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ distance }}km</span></div>
+                                  </div>
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s3" style="padding: 0; margin: 0"><span style="font-weight: 400 ">Duration:</span></div>
+                                      <div class="col s9" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ duration }}</span></div>
+                                  </div>
+                                  <br />
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s4" style="padding: 0; margin: 0"><span style="font-weight: 400 ">Entrys:</span></div>
+                                      <div class="col s8" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ entrys }}</span></div>
+                                  </div>
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s4" style="padding: 0; margin: 0"><span style="font-weight: 400 ">Average Duration:</span></div>
+                                      <div class="col s8" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ avgduration }}</span></div>
+                                  </div>
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s4" style="padding: 0; margin: 0"><span style="font-weight: 400 ">Rating:</span></div>
+                                      <div class="col s8" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ rating }} / 5</span></div>
+                                  </div>
+                                  <div class="row" style="padding: 0; margin: 0">
+                                      <div class="col s4" style="padding: 0; margin: 0"><span style="font-weight: 400 ">Difficulty:</span></div>
+                                      <div class="col s8" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ difficulty }} / 5</span></div>
+                                  </div>
+
+                              </div>
+                          </div>
                       </div>
-                      <div class="row" style="padding: 0; margin: 0">
-                          <div class="col s3" style="padding: 0; margin: 0"><span style="font-weight: 400 ">To:</span></div>
-                          <div class="col s9" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ to }}</span></div>
-                      </div>
-                      <div class="row" style="padding: 0; margin: 0">
-                          <div class="col s3" style="padding: 0; margin: 0"><span style="font-weight: 400">Type:</span></div>
-                          <div class="col s9" style="padding: 0; margin: 0"><span style="font-weight: 300">{{ transport }}</span></div>
-                      </div>
-                      <br />
                       <div class="row" style="padding: 0; margin: 0">
 
                           <div class="col s12" style="padding: 0; margin: 0"><span><span style="font-weight: 400 ">Description:</span></span></div>
                           <div class="col s12" style="padding: 0; margin: 0"><p style="text-align: justify; padding: 0; margin: 0; font-weight: 300">{{ description }}</p></div>
                       </div>
+                      <div class="row" style="padding: 0; margin: 0">
+                          <div class="col s12" style="padding: 0; margin: 0"><span style="font-size: 10pt; font-weight: 400; color: gray">Tour ID: </span><span style="font-size: 10pt; font-weight: 300; color: gray">{{tourId}}</span></div>
+                      </div>
                   </div>
-              </div>
-          </div>
-          <div class="row" style="padding: 0; margin: 0">
-              <div class="col s12" style="padding: 0; margin: 0"><span style="font-size: 10pt; font-weight: 400; color: gray">Tour ID: </span><span style="font-size: 10pt; font-weight: 300; color: gray">{{tourId}}</span></div>
-          </div>
-          <br />
-          <hr />
-          <br />
-          <div class="row" style="padding: 0; margin: 0">
-              <h2 style="font-size: 14pt; padding: 0; margin: 0; font-weight: 400">Logs</h2>
-              <table class="striped responsive-table" style="font-size: 10pt">
-                  <thead>
-                      <tr>
-                          <th style="width: 100px"><b>Date</b></th>
-                          <th style="width: 80px"><b>Duration</b></th>
-                          <th style="width: 80px"><b>Difficulty</b></th>
-                          <th style="width: 80px"><b>Rating</b></th>
-                          <th><b>Comment</b></th>
-                      </tr>
-                  </thead>
 
-                  <tbody>
-                      {{#each logs}}
-                      <tr>
-                          <td style="font-weight: 300">{{Date}}</td>
-                          <td style="font-weight: 300">{{Duration}}</td>
-                          <td style="font-weight: 300">{{Difficulty}}</td>
-                          <td style="font-weight: 300">{{Rating}}</td>
-                          <td><p style="text-align: justify; padding: 0; margin: 0; font-weight: 300">{{Comment}}</p></td>
-                      </tr>
-                      {{/each}}
-                  </tbody>
-              </table>
+
+
+              </div>
+
+
           </div>
+          <hr />
+          {{/each}}
+
       </div>
 
   </body>
