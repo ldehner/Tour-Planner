@@ -15,7 +15,6 @@ namespace TourPlanner.Data
         [Required]
         public string Name { get; set; } = String.Empty;
         [Required]
-        [MaxLength(30)]
         public string Description { get; set; } = String.Empty;
         [Required]
         public TimeSpan Duration { get; set; }

@@ -54,7 +54,7 @@ namespace TourPlannerAPI.Controllers
         [HttpPost("AddTour")]
         public async Task<ActionResult<PresentationTour>> AddTour(SimpleTour tour)
         {
-            var result = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, "fastest");
+            var result = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, tour.Type);
             var map = await _mapQuestManager.GetMapAsync(result.SessionId);
             var presentation = await _tourManager.AddTourAsync(tour, result.Distance, result.Time);
             await _mapQuestManager.SaveMapAsync(presentation.TourId, map);
@@ -167,11 +167,51 @@ namespace TourPlannerAPI.Controllers
             return Ok(await _mapQuestManager.LoadMapAsync(TourId));
         }
 
+        [HttpGet("TourReport/{TourId}")]
+        public async Task<ActionResult<byte[]>> RouteReport(Guid TourId)
+        {
+            return Ok(await _tourManager.GenerateTourReportAsync(TourId));
+        }
+
         [HttpGet("search/{searchTerm}")]
         public async Task<ActionResult<List<PresentationTour>>> SearchTours(string searchTerm)
         {
             return Ok(await _tourManager.SearchAsync(searchTerm.ToUpper()));
         }
+
+        [HttpGet("export/{TourId}")]
+        public async Task<ActionResult<string>> ExportTour(Guid TourId)
+        {
+            try
+            {
+                var result = await _tourManager.ExportTourAsync(TourId);
+                return Ok(result);
+            }
+            catch (TourNotFoundException)
+            {
+                return BadRequest("Tour not found");
+            }
+        }
+        [HttpPost("import")]
+        public async Task<ActionResult<PresentationTour>> ImportTour(PresentationTour tour)
+        {
+            try
+            {
+                var route = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, tour.Type);
+                tour.Distance = route.Distance;
+                tour.Duration = route.Time;
+                var result = await _tourManager.ImportTourAsync(tour);
+                var map = await _mapQuestManager.GetMapAsync(route.SessionId);
+                await _mapQuestManager.SaveMapAsync(tour.TourId, map);
+                return Ok(result);
+            }
+            catch (TourAlreadyExistsException)
+            {
+                return BadRequest("Tour already exists");
+            }
+        }
+
+
 
     }
 }

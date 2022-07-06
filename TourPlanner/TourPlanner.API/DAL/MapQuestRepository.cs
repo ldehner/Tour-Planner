@@ -1,4 +1,8 @@
-﻿namespace TourPlanner.API.DAL
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+namespace TourPlanner.API.DAL
+
 {
     public class MapQuestRepository : IMapQuestRepository
     {
@@ -8,30 +12,24 @@
         /// <param name="mapId">the id of the map</param>
         /// <param name="image">the image of the map</param>
         /// <returns></returns>
-        public async Task<Boolean> SavePicture(Guid mapId, byte[] image) {
-            await File.WriteAllBytesAsync("../maps/"+mapId.ToString()+".map", image);
-            return true;
+        public async Task SavePicture(Guid mapId, byte[] image) {
+            ImageConverter _imageConverter = new ImageConverter();
+            MemoryStream ms = new MemoryStream(image);
+            Image i = Image.FromStream(ms);
+            i.Save("../maps/" + mapId.ToString() + ".jpg");
         }
 
-        /// <summary>
-        /// Updates an existing map
-        /// </summary>
-        /// <param name="mapId">the id of the map</param>
-        /// <param name="image">the image of the map</param>
-        /// <returns></returns>
-        public async Task<Boolean> UpdatePicture(Guid mapId, byte[] image) { throw new NotImplementedException(); }
 
         /// <summary>
         /// Deletes a map
         /// </summary>
         /// <param name="mapId">the id of the map</param>
         /// <returns></returns>
-        public async Task<Boolean> DeletePicture(Guid mapId) {
-            if (File.Exists("../maps/" + mapId.ToString() + ".map"))
+        public async Task DeletePicture(Guid mapId) {
+            if (File.Exists("../maps/" + mapId.ToString() + ".jpg"))
             {
-                File.Delete("../maps/" + mapId.ToString() + ".map");
+                File.Delete("../maps/" + mapId.ToString() + ".jpg");
             }
-            return true;
         }
 
         public async Task<byte[]> GetPicture(Guid mapId)

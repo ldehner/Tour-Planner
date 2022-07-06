@@ -14,5 +14,7 @@ namespace TourPlanner.API.DAL
 
         public Task<List<PresentationTour>> DeleteTourAsync(Guid tourId);
         public Task<List<PresentationTour>> SearchAsync(string searchTerm);
+
+        public Task<PresentationTour> ImportTourAsync(PresentationTour tour);
     }
 }

@@ -91,5 +91,15 @@ namespace TourPlanner.API.DAL
 
             return (presentationTours);
         }
+
+        public async Task<PresentationTour> ImportTourAsync(PresentationTour tour)
+        {
+            var check = await this._context.Tours.FirstOrDefaultAsync(i => i.TourId == tour.TourId);
+            if (check != null) throw new TourAlreadyExistsException();
+            this._context.Tours.Add(await TourConverter.PresentationTourToTours(tour));
+            await this._context.SaveChangesAsync();
+
+            return tour;
+        }
     }
 }
