@@ -90,6 +90,7 @@ namespace TourPlannerAPI.Controllers
         public async Task<ActionResult<PresentationTour>> AddTour(SimpleTour tour)
         {
             _logger.LogInformation("API Request - Add new tour");
+            _logger.LogInformation(tour.Start.GetAdressString());
             var result = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, tour.Type);
             var map = await _mapQuestManager.GetMapAsync(result.SessionId);
             var presentation = await _tourManager.AddTourAsync(tour, result.Distance, result.Time);

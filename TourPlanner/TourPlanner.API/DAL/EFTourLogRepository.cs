@@ -12,7 +12,7 @@ namespace TourPlanner.API.DAL
         public EFTourLogRepository(ToursDataContext toursDataContext) { _context = toursDataContext; }
         public async Task<PresentationTour> AddLogAsync(Guid TourId, SimpleLog log)
         {
-            var tour = await this._context.Tours.Include(i => i.Logs)
+            var tour = await this._context.Tours.Include(tour => tour.Logs).Include(tour => tour.Start).Include(tour => tour.Destination)
                 .FirstOrDefaultAsync(i => i.TourId == TourId);
             if (tour is null) throw new TourNotFoundException();
 

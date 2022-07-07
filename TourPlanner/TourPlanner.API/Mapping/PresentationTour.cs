@@ -8,8 +8,8 @@
         public TimeSpan Duration { get; set; }
         public double Distance { get; set; }
         public string Type { get; set; } = String.Empty;
-        public string Start { get; set; } = String.Empty;
-        public string Destination { get; set; } = String.Empty;
+        public Adress Start { get; set; }
+        public Adress Destination { get; set; }
         public List<PresentationLog> Logs { get; set; }
     }
 }

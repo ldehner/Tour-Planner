@@ -10,7 +10,7 @@ namespace TourPlanner.API.Mapping
             return new PresentationLog
             {
                 LogId = log.LogId,
-                TourId = log.TourId,
+                //TourId = log.TourId,
                 Date = log.Date,
                 Duration = log.Duration,
                 Comment = log.Comment,
@@ -23,7 +23,7 @@ namespace TourPlanner.API.Mapping
         {
             return new Logs
             {
-                TourId = tourId,
+                //TourId = tourId,
                 Date = log.Date,
                 Duration = log.Duration.TimeOfDay,
                 Comment = log.Comment,

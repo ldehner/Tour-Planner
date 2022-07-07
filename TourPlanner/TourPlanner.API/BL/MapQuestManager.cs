@@ -30,10 +30,10 @@ namespace TourPlanner.API.BL
             return await result.Content.ReadAsByteArrayAsync();
         }
 
-        public async Task<MapQuestRouteResult> GetRouteAsync(string from, string to, string type)
+        public async Task<MapQuestRouteResult> GetRouteAsync(Adress from, Adress to, string type)
         {
             HttpClient HttpClient = new();
-            var result = await HttpClient.GetAsync("https://www.mapquestapi.com/directions/v2/route" + "?key=" + _apiKey + "&from=" + from + "&to=" + to + "&routeType=" + type + "&unit=k");
+            var result = await HttpClient.GetAsync("https://www.mapquestapi.com/directions/v2/route" + "?key=" + _apiKey + "&from=" + from.GetAdressString() + "&to=" + to.GetAdressString() + "&routeType=" + type + "&unit=k");
             var content = await result.Content.ReadAsStringAsync();
             HttpClient.Dispose();
             dynamic json = JsonConvert.DeserializeObject<ExpandoObject>(content, new ExpandoObjectConverter());

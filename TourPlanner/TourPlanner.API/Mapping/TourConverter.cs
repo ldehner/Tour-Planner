@@ -12,8 +12,8 @@ namespace TourPlanner.API.Mapping
                 Name = tour.Name,
                 Description = tour.Description,
                 Type = tour.Type,
-                Start = tour.Start,
-                Destination = tour.Destination
+                Start = await AdressConverter.EfToAdressAsync(tour.Start),
+                Destination = await AdressConverter.EfToAdressAsync(tour.Destination)
             };
         }
 
@@ -26,8 +26,8 @@ namespace TourPlanner.API.Mapping
                 Duration = tour.Duration,
                 Distance = tour.Distance,
                 Type = tour.Type,
-                Start = tour.Start,
-                Destination = tour.Destination,
+                Start = await AdressConverter.EfToAdressAsync(tour.Start),
+                Destination = await AdressConverter.EfToAdressAsync(tour.Destination),
                 Logs = await LogConverter.LogsListToPresentationLogList(tour.Logs),
             };
         }
@@ -56,8 +56,8 @@ namespace TourPlanner.API.Mapping
                 Duration = tour.Duration,
                 Distance = tour.Distance,
                 Type = tour.Type,
-                Start = tour.Start,
-                Destination = tour.Destination,
+                Start = await AdressConverter.AdressToEfAsync(tour.Start, tour.TourId),
+                Destination = await AdressConverter.AdressToEfAsync(tour.Destination, tour.TourId),
                 Logs = await LogConverter.PresentationLogListToLogsList(tour.Logs),
             };
         }
