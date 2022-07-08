@@ -17,6 +17,15 @@ var pdfTemplateRepository = new PdfTemplateRepository(System.IO.Directory.GetCur
 var tourManager = new TourManager(tourRepository, pdfTemplateRepository);
 var tourLogManager = new TourLogManager(tourLogRepository);
 var mapQuestManager = new MapQuestManager(mapQuestRepository, builder.Configuration.GetConnectionString("MapQuestApiKey"));
+
+var weatherRepository = new WeatherRepository(builder.Configuration.GetConnectionString("OpenWeatherMapApiKey"));
+var coordinatesRepository = new CoordinatesRepository(builder.Configuration.GetConnectionString("OpenWeatherMapApiKey"));
+
+var weatherManager = new WeatherManager(weatherRepository, coordinatesRepository);
+
+builder.Services.Add(new ServiceDescriptor(typeof(IWeatherManager), weatherManager));
+
+
 builder.Services.Add(new ServiceDescriptor(typeof(ITourManager), tourManager));
 builder.Services.Add(new ServiceDescriptor(typeof(ITourLogManager), tourLogManager));
 builder.Services.Add(new ServiceDescriptor(typeof(IMapQuestManager), mapQuestManager));
