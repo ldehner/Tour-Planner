@@ -29,7 +29,7 @@ namespace TourPlanner.API.DAL
 
             this._context.SaveChanges();
 
-            return await TourConverter.ToursToPresentationTour(await this._context.Tours.Include(i => i.Logs)
+            return await TourConverter.ToursToPresentationTour(await _context.Tours.Include(i => i.Logs)
                 .FirstOrDefaultAsync(i => i.TourId == TourId)); 
         }
 
@@ -37,7 +37,7 @@ namespace TourPlanner.API.DAL
         {
             var tour = await this._context.Tours.FindAsync(tourId);
             if (tour is null) throw new TourNotFoundException();
-            Logs findLog = null;
+            Logs? findLog = null;
             tour.Logs.ForEach(log =>
             {
                 if (log.LogId.CompareTo(logId) == 0) findLog = log;
@@ -53,7 +53,7 @@ namespace TourPlanner.API.DAL
             var tour = await this._context.Tours.Include(i => i.Logs)
                 .FirstOrDefaultAsync(i => i.TourId == tourId);
             if (tour is null) throw new TourNotFoundException();
-            Logs findLog = null;
+            Logs? findLog = null;
             tour.Logs.ForEach(log =>
             {
                 if (log.LogId.CompareTo(logId) == 0) findLog = log;
@@ -74,7 +74,7 @@ namespace TourPlanner.API.DAL
         {
             var tour = await this._context.Tours.FindAsync(tourId);
             if (tour is null) throw new TourNotFoundException();
-            Logs findLog = null;
+            Logs? findLog = null;
             tour.Logs.ForEach(log =>
             {
                 if (log.LogId.CompareTo(logId) == 0) findLog = log;

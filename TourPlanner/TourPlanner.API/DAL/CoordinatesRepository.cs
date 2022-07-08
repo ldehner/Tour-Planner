@@ -22,7 +22,7 @@ namespace TourPlanner.API.DAL
             var content = await result.Content.ReadAsStringAsync();
             HttpClient.Dispose();
             dynamic json = JArray.Parse(content);
-            return new Coordinates { Lat = json[0].lat, Long = json[0].lon };
+            return new Coordinates(json[0].lat, json[0].lon);
         }
     }
 }

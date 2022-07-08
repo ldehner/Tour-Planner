@@ -1,15 +1,7 @@
 ﻿using TourPlanner.API.Data;
 using TourPlanner.API.Mapping;
 using TourPlanner.Data;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.Xml;
-using TourPlanner.API.BL;
-using TourPlanner.API.DAL;
-using TourPlanner.API.Data;
-using TourPlanner.Data;
 using TourPlanner.API.Exceptions;
 
 namespace TourPlanner.API.DAL

@@ -5,7 +5,7 @@ using TourPlanner.API.Mapping;
 namespace TourPlanner.API.Controllers
 {
     /// <summary>
-    /// API Controller for the tour planner
+    /// API Controller for the weather
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -15,18 +15,22 @@ namespace TourPlanner.API.Controllers
         private readonly ILogger<WeatherController> _logger;
 
         /// <summary>
-        /// Tour Planner Controller Constructor
+        /// 
         /// </summary>
-        /// <param name="logger">Log4Net logger</param>
-        /// <param name="tourManager">the tour manager</param>
-        /// <param name="tourLogManager">the log manager</param>
-        /// <param name="mapQuestManager">the mapquest manager</param>
+        /// <param name="logger"></param>
+        /// <param name="weatherManager"></param>
         public WeatherController(ILogger<WeatherController> logger, IWeatherManager weatherManager)
         {
             _logger = logger;
             _weatherManager = weatherManager;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="destination"></param>
+        /// <returns></returns>
         [HttpGet("GetWeather/{start}/{destination}")]
         public async Task<ActionResult<WeatherResult>> GetWeather(string start, string destination)
         {

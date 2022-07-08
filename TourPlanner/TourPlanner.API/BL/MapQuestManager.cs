@@ -36,7 +36,9 @@ namespace TourPlanner.API.BL
             var result = await HttpClient.GetAsync("https://www.mapquestapi.com/directions/v2/route" + "?key=" + _apiKey + "&from=" + from.GetAdressString() + "&to=" + to.GetAdressString() + "&routeType=" + type + "&unit=k");
             var content = await result.Content.ReadAsStringAsync();
             HttpClient.Dispose();
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic json = JsonConvert.DeserializeObject<ExpandoObject>(content, new ExpandoObjectConverter());
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             string time = json.route.formattedTime;
             var timeArray = time.Split(":");
             return new MapQuestRouteResult(json.route.distance, new TimeSpan(int.Parse(timeArray[0]), int.Parse(timeArray[1]), int.Parse(timeArray[2])) ,json.route.sessionId);

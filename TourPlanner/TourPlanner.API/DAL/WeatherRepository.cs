@@ -21,7 +21,9 @@ namespace TourPlanner.API.DAL
             var result = await HttpClient.GetAsync("https://api.openweathermap.org/data/2.5/weather?lat="+coordinates.Lat+"&lon="+coordinates.Long+"&appid=" + _key);
             var content = await result.Content.ReadAsStringAsync();
             HttpClient.Dispose();
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic json = JsonConvert.DeserializeObject<ExpandoObject>(content, new ExpandoObjectConverter()); ;
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
             return new WeatherResult { FromCondition = json.weather[0].description, FromTemp = (Math.Round(json.main.temp - 273.15, 1)).ToString() };
         }
     }
