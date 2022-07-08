@@ -10,24 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Tour_planner
+namespace Tour_planner.UI.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaktionslogik für Window1.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ChangeTour : Window
     {
-        public MainWindow()
+        public ChangeTour()
         {
             InitializeComponent();
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CloseWindow(object sender, RoutedEventArgs e)
         {
-
+            Close();
         }
     }
 }

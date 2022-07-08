@@ -8,30 +8,30 @@ namespace Tour_planner.Business
 {
     public class Tour
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string From { get; set; }
-        public string To { get; set; }
-        public string TransportType { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; } = String.Empty;
+        public string Description { get; set; } = String.Empty;
+        public string Duration { get; set; }
         public double Distance { get; set; }
-        public string Time { get; set; }
-        public string Info { get; set; }
-        public string? ImageLocation { get; set; }
-        public int Popularity { get; set; }
-        public int Childfriendliness { get; set; }
+        public string Type { get; set; } = String.Empty;
+        public string Start { get; set; } = String.Empty;
+        public string Destination { get; set; } = String.Empty;
 
-
-        public Tour(string Name, string Description, string From, string To, string TransportType, double Distance, string Time, string Info, string ImageLocation)
+        public Tour()
         {
+
+        }
+
+        public Tour(string Id, string Name, string Description, string Duration, double Distance, string Type, string Start, string Destination)
+        {
+            this.Id = Id;
             this.Name = Name;
             this.Description = Description;
-            this.From = From;
-            this.To = To;
-            this.TransportType = TransportType;
+            this.Duration = Duration;
             this.Distance = Distance;
-            this.Time = Time;
-            this.Info = Info;
-            this.ImageLocation = ImageLocation;
+            this.Type = Type;
+            this.Start = Start;
+            this.Destination = Destination;
         }
 
 

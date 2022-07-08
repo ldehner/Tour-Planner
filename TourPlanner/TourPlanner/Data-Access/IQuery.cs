@@ -10,6 +10,11 @@ namespace Tour_planner.Data_Access
     public interface IQuery
     {
         public Task<Tourlist> GetTours();
-
+        public Task<Tour> GetTourById(string id);
+        public Task PostTour(Tour tour);
+        public void DeleteTour(string Id);
+        public Task UpdateTour(Tour newtour, string oldId);
+        public Task<Tourlist> GetToursBySearchTerm(string searchTerm);
+        
     }
 }

@@ -1,0 +1,41 @@
+﻿<Window x:Class="Tour_planner.UI.Views.ChangeTour"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tour_planner.UI.Views"
+        mc:Ignorable="d"
+         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Window1" Height="400" Width="450">
+    <Grid>
+        <StackPanel Margin="10">
+            <Label FontSize="20">Update Tour</Label>
+
+            <TextBox Text="{Binding CurrentTour.Name, UpdateSourceTrigger=PropertyChanged}" x:Name="NameCreateTextBox" materialDesign:HintAssist.Hint="Name" materialDesign:HintAssist.HelperText="This Field is required"/>
+            <TextBox Text="{Binding CurrentTour.Start, UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="StartCreateTextBox" materialDesign:HintAssist.Hint="Start" materialDesign:HintAssist.HelperText="This Field is required"/>
+            <TextBox Text="{Binding CurrentTour.Destination, UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="DestinationCreateTextBox" materialDesign:HintAssist.Hint="Destination" materialDesign:HintAssist.HelperText="This Field is required" />
+            <ComboBox Text="{Binding CurrentTour.Type,  UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="OutlinedComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}"  materialDesign:HintAssist.Hint="Transportation">
+                <ComboBoxItem IsSelected="True">Bicycle</ComboBoxItem>
+                <ComboBoxItem>Pedestrian</ComboBoxItem>
+                <ComboBoxItem>Fastest</ComboBoxItem>
+                <ComboBoxItem>Shortest</ComboBoxItem>
+            </ComboBox>
+            <TextBox Text="{Binding CurrentTour.Description, UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="DescriptionCreateTextBox" materialDesign:HintAssist.Hint="Description" />
+
+            <DockPanel Margin="0 15 0 5">
+                <Button Click="CloseWindow" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignRaisedDarkButton}" Content="Cancel" Width="81"/>
+                <Button Click="CloseWindow" Command="{Binding UpdateTourCommand}" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Width="83" Content="Save" />
+            </DockPanel>
+
+
+        </StackPanel>
+    </Grid>
+    
+</Window>
