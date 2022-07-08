@@ -14,15 +14,15 @@ namespace Tour_planner.Business
         public string Duration { get; set; }
         public double Distance { get; set; }
         public string Type { get; set; } = String.Empty;
-        public string Start { get; set; } = String.Empty;
-        public string Destination { get; set; } = String.Empty;
+        public Address Start { get; set; }
+        public Address Destination { get; set; }
 
         public Tour()
         {
 
         }
 
-        public Tour(string Id, string Name, string Description, string Duration, double Distance, string Type, string Start, string Destination)
+        public Tour(string Id, string Name, string Description, string Duration, double Distance, string Type, Address Start, Address Destination)
         {
             this.Id = Id;
             this.Name = Name;

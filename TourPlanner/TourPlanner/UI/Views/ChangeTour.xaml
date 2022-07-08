@@ -13,14 +13,48 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Window1" Height="400" Width="450">
+        Title="Window1" Height="440" Width="450">
     <Grid>
         <StackPanel Margin="10">
             <Label FontSize="20">Update Tour</Label>
 
             <TextBox Text="{Binding CurrentTour.Name, UpdateSourceTrigger=PropertyChanged}" x:Name="NameCreateTextBox" materialDesign:HintAssist.Hint="Name" materialDesign:HintAssist.HelperText="This Field is required"/>
-            <TextBox Text="{Binding CurrentTour.Start, UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="StartCreateTextBox" materialDesign:HintAssist.Hint="Start" materialDesign:HintAssist.HelperText="This Field is required"/>
-            <TextBox Text="{Binding CurrentTour.Destination, UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="DestinationCreateTextBox" materialDesign:HintAssist.Hint="Destination" materialDesign:HintAssist.HelperText="This Field is required" />
+            <Label Margin="0 20 0 0" Content="Starting Address"></Label>
+            <Grid Margin ="10 0 10 10" Width="450" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+
+
+                <TextBox Grid.Column="0" Text="{Binding CurrentTour.StartCountry, UpdateSourceTrigger=PropertyChanged}" x:Name="StartChangeCountryTextBox" materialDesign:HintAssist.Hint="Country" materialDesign:HintAssist.HelperText="This Field is required"/>
+                <TextBox Grid.Column="1" Text="{Binding CurrentTour.StartCity, UpdateSourceTrigger=PropertyChanged}" x:Name="StartChangeCityTextBox" materialDesign:HintAssist.Hint="City" materialDesign:HintAssist.HelperText="This Field is required"/>
+                <TextBox Grid.Column="2" Text="{Binding CurrentTour.StartPostalCode, UpdateSourceTrigger=PropertyChanged}" x:Name="StartChangePostelCodeTextBox" materialDesign:HintAssist.Hint="Plz" />
+                <TextBox Grid.Column="3" Text="{Binding CurrentTour.StartStreet, UpdateSourceTrigger=PropertyChanged}" x:Name="StartChangeStreetTextBox" materialDesign:HintAssist.Hint="Street" />
+                <TextBox Grid.Column="4" Text="{Binding CurrentTour.StartHouseNumber, UpdateSourceTrigger=PropertyChanged}" x:Name="StartChangeHouseNumberTextBox" materialDesign:HintAssist.Hint="Nr"/>
+            </Grid>
+
+
+            <Label Margin="0 20 0 0" Content="Destination Address"></Label>
+            <Grid Margin ="10 0 10 10" Width="450" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+
+
+                <TextBox Grid.Column="0" Text="{Binding CurrentTour.DestinationCountry, UpdateSourceTrigger=PropertyChanged}" x:Name="DestinationChangeCountryTextBox" materialDesign:HintAssist.Hint="Country" materialDesign:HintAssist.HelperText="This Field is required"/>
+                <TextBox Grid.Column="1" Text="{Binding CurrentTour.DestinationCity, UpdateSourceTrigger=PropertyChanged}" x:Name="DestinationChangeCityTextBox" materialDesign:HintAssist.Hint="City" materialDesign:HintAssist.HelperText="This Field is required"/>
+                <TextBox Grid.Column="2" Text="{Binding CurrentTour.DestinationPostalCode, UpdateSourceTrigger=PropertyChanged}" x:Name="DestinationChangePostelCodeTextBox" materialDesign:HintAssist.Hint="Plz" />
+                <TextBox Grid.Column="3" Text="{Binding CurrentTour.DestinationStreet, UpdateSourceTrigger=PropertyChanged}" x:Name="DestinationChangeStreetTextBox" materialDesign:HintAssist.Hint="Street" />
+                <TextBox Grid.Column="4" Text="{Binding CurrentTour.DestinationHouseNumber, UpdateSourceTrigger=PropertyChanged}" x:Name="DestinationChangeHouseNumberTextBox" materialDesign:HintAssist.Hint="Nr"/>
+            </Grid>
             <ComboBox Text="{Binding CurrentTour.Type,  UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="OutlinedComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}"  materialDesign:HintAssist.Hint="Transportation">
                 <ComboBoxItem IsSelected="True">Bicycle</ComboBoxItem>
                 <ComboBoxItem>Pedestrian</ComboBoxItem>

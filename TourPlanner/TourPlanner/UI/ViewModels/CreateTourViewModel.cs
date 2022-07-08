@@ -18,7 +18,7 @@ namespace Tour_planner.UI.ViewModels
 
         private IQuery requets;
         private TourModel _newtourModel;
-        
+
 
         public CreateTourViewModel()
         {
@@ -36,8 +36,8 @@ namespace Tour_planner.UI.ViewModels
         private ICommand _saveCommand;
         public ICommand SaveCommand
         {
-            get 
-            { 
+            get
+            {
                 if (_saveCommand != null)
                 {
                     return _saveCommand;
@@ -51,7 +51,7 @@ namespace Tour_planner.UI.ViewModels
         {
             try
             {
-                if (string.IsNullOrEmpty(_newtourModel.Name) || string.IsNullOrEmpty(_newtourModel.Start) || string.IsNullOrEmpty(_newtourModel.Destination))
+                if (CheckForImputs())
                 {
                     throw new ArgumentException("Input cannot be Empty");
                 }
@@ -70,7 +70,7 @@ namespace Tour_planner.UI.ViewModels
                     tour.Description = _newtourModel.Description;
 
                     requets.PostTour(tour);
-                    
+
                 }
             }
             catch
@@ -87,6 +87,20 @@ namespace Tour_planner.UI.ViewModels
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        private bool CheckForImputs()
+        {
+            if (string.IsNullOrEmpty(newTourModel.Name) && string.IsNullOrEmpty(newTourModel.StartCountry) && string.IsNullOrEmpty(newTourModel.StartCity) &&
+                string.IsNullOrEmpty(newTourModel.DestinationCountry) && string.IsNullOrEmpty(newTourModel.DestinationCity))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

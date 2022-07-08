@@ -57,7 +57,7 @@ namespace Tour_planner.UI.ViewModels
         {
             try
             {
-                if (string.IsNullOrEmpty(currenttourModel.Name) || string.IsNullOrEmpty(currenttourModel.Start) || string.IsNullOrEmpty(currenttourModel.Destination))
+                if (CheckForImputs())
                 {
                     throw new ArgumentException("Input cannot be Empty");
                 }
@@ -67,6 +67,8 @@ namespace Tour_planner.UI.ViewModels
                     {
                         currenttourModel.Description = " ";
                     }
+                   
+
 
                     Tour tour = new Tour();
                     tour.Name = currenttourModel.Name;
@@ -82,6 +84,19 @@ namespace Tour_planner.UI.ViewModels
             catch
             {
                 throw new Exception();
+            }
+        }
+
+        private bool CheckForImputs()
+        {
+            if (string.IsNullOrEmpty(currenttourModel.Name) && string.IsNullOrEmpty(currenttourModel.StartCountry) && string.IsNullOrEmpty(currenttourModel.StartCity) &&
+                string.IsNullOrEmpty(currenttourModel.DestinationCountry) && string.IsNullOrEmpty(currenttourModel.DestinationCity))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }
