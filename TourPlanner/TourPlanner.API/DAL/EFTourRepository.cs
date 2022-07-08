@@ -84,8 +84,9 @@ namespace TourPlanner.API.DAL
         {
             var tours = await this._context.Tours.Where(i => i.Name.ToUpper().Contains(searchTerm) || i.Description.ToUpper().Contains(searchTerm) || i.Start.Country.ToUpper().Contains(searchTerm) || i.Start.Street.ToUpper().Contains(searchTerm) || i.Start.City.ToUpper().Contains(searchTerm) || i.Destination.Country.ToUpper().Contains(searchTerm) || i.Destination.Street.ToUpper().Contains(searchTerm) || i.Destination.City.ToUpper().Contains(searchTerm)).ToListAsync();
             var presentationTours = new List<PresentationTour>();
-            if(tours is not null) tours.ForEach(async tour => presentationTours.Add(await TourConverter.ToursToPresentationTour(tour)));
-
+            
+            if (tours is not null) tours.ForEach(async tour => presentationTours.Add(await TourConverter.ToursToPresentationTour(tour)));
+            if (presentationTours.Count <= 0) throw new TourNotFoundException();
             return (presentationTours);
         }
 

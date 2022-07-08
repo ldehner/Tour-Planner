@@ -6,11 +6,11 @@ using TourPlanner.API.Mapping;
 
 namespace TourPlanner.API.DAL
 {
-    public class WeatherRepository : IWeatherRepository
+    public class ApiWeatherRepository : IWeatherRepository
     {
         private readonly string _key;
 
-        public WeatherRepository(string key)
+        public ApiWeatherRepository(string key)
         {
             _key = key;
         }

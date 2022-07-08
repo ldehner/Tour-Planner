@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TourPlanner.API.BL;
+using TourPlanner.API.Exceptions;
 using TourPlanner.API.Mapping;
 
 namespace TourPlanner.API.Controllers
@@ -15,7 +16,7 @@ namespace TourPlanner.API.Controllers
         private readonly ILogger<WeatherController> _logger;
 
         /// <summary>
-        /// 
+        /// Sets Loggger and Manager
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="weatherManager"></param>
@@ -26,16 +27,29 @@ namespace TourPlanner.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Gets the weather of start city and destination city
         /// </summary>
-        /// <param name="start"></param>
-        /// <param name="destination"></param>
-        /// <returns></returns>
+        /// <param name="start">the start city</param>
+        /// <param name="destination">the destination city</param>
+        /// <response code="200">Success - Weather returned</response>
+        /// <response code="404">Invalid Adress</response>
+        /// <response code="500">Oops! Problem on our end</response>
+        /// <returns>The weather</returns>
         [HttpGet("GetWeather/{start}/{destination}")]
         public async Task<ActionResult<WeatherResult>> GetWeather(string start, string destination)
         {
             _logger.LogInformation("API Request - Get weather");
-            return Ok(await _weatherManager.GetWeatherAsync(start, destination));
+            try
+            {
+                var result = await _weatherManager.GetWeatherAsync(start, destination);
+                return Ok(result);
+            }
+            catch (InvalidAdressException)
+            {
+                _logger.LogError("Coordinates of start or/and destination adress could not be found");
+                return NotFound("Coordinates of start or/and destination adress could not be found");
+            }
+            
         }
     }
 }

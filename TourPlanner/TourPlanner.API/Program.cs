@@ -6,36 +6,45 @@ using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Adding Logging
 builder.Logging.AddLog4Net("log4net.config");
+
 // Add services to the container.
 var optionsBuilder = new DbContextOptionsBuilder<ToursDataContext>();
 optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("TourPlannerDb"));
+
+// Tour Manager & Repositories
 var tourRepository = new EFTourRepository(new ToursDataContext(optionsBuilder.Options));
-var tourLogRepository = new EFTourLogRepository(new ToursDataContext(optionsBuilder.Options));
-var mapQuestRepository = new FileMapRepository(System.IO.Directory.GetCurrentDirectory()+"/maps/");
 var pdfTemplateRepository = new PdfTemplateRepository(System.IO.Directory.GetCurrentDirectory());
 var tourManager = new TourManager(tourRepository, pdfTemplateRepository);
+builder.Services.Add(new ServiceDescriptor(typeof(ITourManager), tourManager));
+
+// Log Manager & Repository
+var tourLogRepository = new EFTourLogRepository(new ToursDataContext(optionsBuilder.Options));
 var tourLogManager = new TourLogManager(tourLogRepository);
-var mapQuestManager = new MapQuestManager(mapQuestRepository, builder.Configuration.GetConnectionString("MapQuestApiKey"));
+builder.Services.Add(new ServiceDescriptor(typeof(ITourLogManager), tourLogManager));
 
-var weatherRepository = new WeatherRepository(builder.Configuration.GetConnectionString("OpenWeatherMapApiKey"));
-var coordinatesRepository = new CoordinatesRepository(builder.Configuration.GetConnectionString("OpenWeatherMapApiKey"));
+// MapQuest Manager & Repositories
+var fileMapRepository = new FileMapRepository(System.IO.Directory.GetCurrentDirectory()+"/maps/");
+var mapQuestRepository = new ApiMapQuestRepository(builder.Configuration.GetConnectionString("MapQuestApiKey"));
+var mapQuestManager = new MapQuestManager(fileMapRepository, mapQuestRepository);
+builder.Services.Add(new ServiceDescriptor(typeof(IMapQuestManager), mapQuestManager));
 
+// Weather API
+var weatherRepository = new ApiWeatherRepository(builder.Configuration.GetConnectionString("OpenWeatherMapApiKey"));
+var coordinatesRepository = new ApiCoordinatesRepository(builder.Configuration.GetConnectionString("OpenWeatherMapApiKey"));
 var weatherManager = new WeatherManager(weatherRepository, coordinatesRepository);
-
 builder.Services.Add(new ServiceDescriptor(typeof(IWeatherManager), weatherManager));
 
-
-builder.Services.Add(new ServiceDescriptor(typeof(ITourManager), tourManager));
-builder.Services.Add(new ServiceDescriptor(typeof(ITourLogManager), tourLogManager));
-builder.Services.Add(new ServiceDescriptor(typeof(IMapQuestManager), mapQuestManager));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Adds xml documentation to swagger
 builder.Services.AddSwaggerGen(opts =>
 {
-
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     opts.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });

@@ -30,7 +30,7 @@ namespace TourPlanner.Data
         {
         }
         public DbSet<Tours> Tours { get; set; }
-            public DbSet<Logs> Logs { get; set; }
+        public DbSet<Logs> Logs { get; set; }
         public DbSet<Adresses> Adress { get; set; }
     }
 }

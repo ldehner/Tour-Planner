@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using TourPlanner.API.Exceptions;
+
 namespace TourPlanner.API.DAL
 
 {
@@ -40,7 +42,9 @@ namespace TourPlanner.API.DAL
 
         public async Task<byte[]> GetPicture(Guid mapId)
         {
-            return await File.ReadAllBytesAsync(_path + mapId.ToString() + ".jpg");
+            if (File.Exists(_path + mapId.ToString() + ".jpg")) return await File.ReadAllBytesAsync(_path + mapId.ToString() + ".jpg");
+            throw new TourNotFoundException();
+
         }
     }
 }

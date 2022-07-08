@@ -90,8 +90,16 @@ namespace TourPlannerAPI.Controllers
         public async Task<ActionResult<PresentationTour>> AddTour(SimpleTour tour)
         {
             _logger.LogInformation("API Request - Add new tour");
-            _logger.LogInformation(tour.Start.GetAdressString());
-            var result = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, tour.Type);
+            MapQuestRouteResult result;
+            try
+            {
+                result = await _mapQuestManager.GetRouteAsync(tour.Start, tour.Destination, tour.Type);
+            }
+            catch (InvalidAdressException)
+            {
+                _logger.LogError("Start or destination adress could not be found");
+                return NotFound("Start or destination adress could not be found");
+            }
             var map = await _mapQuestManager.GetMapAsync(result.SessionId);
             var presentation = await _tourManager.AddTourAsync(tour, result.Distance, result.Time);
             await _mapQuestManager.SaveMapAsync(presentation.TourId, map);
@@ -334,7 +342,16 @@ namespace TourPlannerAPI.Controllers
         public async Task<ActionResult<List<PresentationTour>>> SearchTours(string searchTerm)
         {
             _logger.LogInformation("API Request - Search for term " + searchTerm);
-            return Ok(await _tourManager.SearchAsync(searchTerm.ToUpper()));
+            try
+            {
+                var result = await _tourManager.SearchAsync(searchTerm.ToUpper());
+                return Ok(result);
+            }
+            catch (TourNotFoundException)
+            {
+                _logger.LogError("Nothing for searchterm " + searchTerm + " found");
+                return NotFound("No matching tours found");
+            }
         }
 
         /// <summary>

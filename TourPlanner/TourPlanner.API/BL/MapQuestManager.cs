@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System.Dynamic;
 using TourPlanner.API.DAL;
+using TourPlanner.API.Exceptions;
 using TourPlanner.API.Mapping;
 
 namespace TourPlanner.API.BL
@@ -9,12 +10,12 @@ namespace TourPlanner.API.BL
     public class MapQuestManager : IMapQuestManager
     {
         private readonly IMapRepository _mapRepository;
-        private readonly string _apiKey;
+        private readonly IMapQuestRepository _mapQuestRepository;
 
-        public MapQuestManager(IMapRepository mapRepository, string apiKey)
+        public MapQuestManager(IMapRepository mapRepository, IMapQuestRepository mapQuestRepository)
         {
             _mapRepository = mapRepository;
-            _apiKey = apiKey;
+            _mapQuestRepository = mapQuestRepository;
         }
 
         public async Task DeleteMapAsync(Guid TourId)
@@ -24,21 +25,16 @@ namespace TourPlanner.API.BL
 
         public async Task<byte[]> GetMapAsync(string sessionId)
         {
-            HttpClient HttpClient = new();
-            var result = await HttpClient.GetAsync("https://www.mapquestapi.com/staticmap/v5/map?key=" + _apiKey + " + &session=" + sessionId + "&routeArc=true&size=@2x");
-            HttpClient.Dispose();
-            return await result.Content.ReadAsByteArrayAsync();
+            return await _mapQuestRepository.GetMapAsync(sessionId);
         }
 
         public async Task<MapQuestRouteResult> GetRouteAsync(Adress from, Adress to, string type)
         {
-            HttpClient HttpClient = new();
-            var result = await HttpClient.GetAsync("https://www.mapquestapi.com/directions/v2/route" + "?key=" + _apiKey + "&from=" + from.GetAdressString() + "&to=" + to.GetAdressString() + "&routeType=" + type + "&unit=k");
-            var content = await result.Content.ReadAsStringAsync();
-            HttpClient.Dispose();
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+            var content = await _mapQuestRepository.GetRouteAsync(from, to, type);
+            #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic json = JsonConvert.DeserializeObject<ExpandoObject>(content, new ExpandoObjectConverter());
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+            #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+            if (json.route.realTime == -1) throw new InvalidAdressException();
             string time = json.route.formattedTime;
             var timeArray = time.Split(":");
             return new MapQuestRouteResult(json.route.distance, new TimeSpan(int.Parse(timeArray[0]), int.Parse(timeArray[1]), int.Parse(timeArray[2])) ,json.route.sessionId);

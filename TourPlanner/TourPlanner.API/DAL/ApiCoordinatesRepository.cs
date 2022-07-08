@@ -2,15 +2,16 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.Dynamic;
+using TourPlanner.API.Exceptions;
 using TourPlanner.API.Mapping;
 
 namespace TourPlanner.API.DAL
 {
-    public class CoordinatesRepository : ICoordinatesRepository
+    public class ApiCoordinatesRepository : ICoordinatesRepository
     {
         private readonly string _key;
 
-        public CoordinatesRepository(string key)
+        public ApiCoordinatesRepository(string key)
         {
             _key = key;
         }
@@ -22,7 +23,8 @@ namespace TourPlanner.API.DAL
             var content = await result.Content.ReadAsStringAsync();
             HttpClient.Dispose();
             dynamic json = JArray.Parse(content);
-            return new Coordinates(json[0].lat, json[0].lon);
+            if (json.Count <= 0) throw new InvalidAdressException();
+            return new Coordinates(json[0].lat.ToString(), json[0].lon.ToString());
         }
     }
 }
