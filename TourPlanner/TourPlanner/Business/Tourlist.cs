@@ -16,11 +16,16 @@ namespace Tour_planner.Business
             TourList = new Dictionary<string, Tour>();
         }
 
+        public Tourlist(string restData)
+        {
+            TourList = new Dictionary<string, Tour>();
+        }
+
         public bool AddTourToList(Tour tour)
         {
             try
             {
-                TourList.Add(tour.Name, tour);
+                TourList.Add(tour.Id, tour);
                 return true;
             }
             catch (Exception)
