@@ -26,6 +26,7 @@ namespace TourPlanner.API.Mapping
                 builder.Append(", ");
             }
             if (Plz is not null) builder.Append(Plz);
+            builder.Append(" ");
             builder.Append(City);
             builder.Append(", ");
             builder.Append(Country);
