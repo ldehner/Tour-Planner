@@ -20,10 +20,10 @@ namespace TourPlanner.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            if (!options.IsConfigured)
-            {
-                options.UseNpgsql("Server=hattie.db.elephantsql.com;Database=sdgyomkk;Port=5432;User Id=sdgyomkk;Password=PYQhfkmfL4sBlO419OgEPuSkHEtQiuIp");
-            }
+            //if (!options.IsConfigured)
+           //{
+                //options.UseNpgsql("");
+            //}
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
