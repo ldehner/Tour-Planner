@@ -14,10 +14,10 @@ namespace TourPlanner.API.BL
             _coordinatesRepository = coordinatesRepository;
         }
 
-        public async Task<WeatherResult> GetWeatherAsync(Adress from, Adress to)
+        public async Task<WeatherResult> GetWeatherAsync(string from, string to)
         {
-            var weather = await _weatherRepository.GetWeatherAsync(await _coordinatesRepository.GetCoordinatesAsync(from.City, from.Country));
-            var tmp = await _weatherRepository.GetWeatherAsync(await _coordinatesRepository.GetCoordinatesAsync(to.City, to.Country));
+            var weather = await _weatherRepository.GetWeatherAsync(await _coordinatesRepository.GetCoordinatesAsync(from));
+            var tmp = await _weatherRepository.GetWeatherAsync(await _coordinatesRepository.GetCoordinatesAsync(to));
             weather.ToCondition = tmp.FromCondition;
             weather.ToTemp = tmp.FromTemp;
 

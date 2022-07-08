@@ -15,10 +15,10 @@ namespace TourPlanner.API.DAL
             _key = key;
         }
 
-        public async Task<Coordinates> GetCoordinatesAsync(string city, string country)
+        public async Task<Coordinates> GetCoordinatesAsync(string adress)
         {
             using var HttpClient = new HttpClient();
-            var result = await HttpClient.GetAsync("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "," + country + "&limit=1&appid=" + _key);
+            var result = await HttpClient.GetAsync("https://api.openweathermap.org/geo/1.0/direct?q=" + adress + "&limit=1&appid=" + _key);
             var content = await result.Content.ReadAsStringAsync();
             HttpClient.Dispose();
             dynamic json = JArray.Parse(content);

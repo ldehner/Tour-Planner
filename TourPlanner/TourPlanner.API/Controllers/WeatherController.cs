@@ -27,11 +27,11 @@ namespace TourPlanner.API.Controllers
             _weatherManager = weatherManager;
         }
 
-        [HttpPost("GetWeather")]
-        public async Task<ActionResult<WeatherResult>> GetWeather(WeatherAdress adress)
+        [HttpGet("GetWeather/{start}/{destination}")]
+        public async Task<ActionResult<WeatherResult>> GetWeather(string start, string destination)
         {
             _logger.LogInformation("API Request - Get weather");
-            return Ok(await _weatherManager.GetWeatherAsync(adress.From, adress.To));
+            return Ok(await _weatherManager.GetWeatherAsync(start, destination));
         }
     }
 }
