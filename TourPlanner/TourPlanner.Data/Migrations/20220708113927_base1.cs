@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TourPlanner.Data.Migrations
 {
-    public partial class baseMigration : Migration
+    public partial class base1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,6 +13,8 @@ namespace TourPlanner.Data.Migrations
                 name: "Adress",
                 columns: table => new
                 {
+                    AdressId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TourIdStart = table.Column<Guid>(type: "uuid", nullable: false),
                     Street = table.Column<string>(type: "text", nullable: true),
                     HouseNumber = table.Column<string>(type: "text", nullable: true),
                     Plz = table.Column<string>(type: "text", nullable: true),
@@ -21,6 +23,7 @@ namespace TourPlanner.Data.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_Adress", x => x.AdressId);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,11 +35,25 @@ namespace TourPlanner.Data.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
                     Distance = table.Column<double>(type: "double precision", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false)
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    TourIdStart = table.Column<Guid>(type: "uuid", nullable: false),
+                    TourIdDest = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tours", x => x.TourId);
+                    table.ForeignKey(
+                        name: "FK_Tours_Adress_TourIdDest",
+                        column: x => x.TourIdDest,
+                        principalTable: "Adress",
+                        principalColumn: "AdressId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tours_Adress_TourIdStart",
+                        column: x => x.TourIdStart,
+                        principalTable: "Adress",
+                        principalColumn: "AdressId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,18 +83,28 @@ namespace TourPlanner.Data.Migrations
                 name: "IX_Logs_TourId",
                 table: "Logs",
                 column: "TourId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tours_TourIdDest",
+                table: "Tours",
+                column: "TourIdDest");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tours_TourIdStart",
+                table: "Tours",
+                column: "TourIdStart");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Adress");
-
-            migrationBuilder.DropTable(
                 name: "Logs");
 
             migrationBuilder.DropTable(
                 name: "Tours");
+
+            migrationBuilder.DropTable(
+                name: "Adress");
         }
     }
 }

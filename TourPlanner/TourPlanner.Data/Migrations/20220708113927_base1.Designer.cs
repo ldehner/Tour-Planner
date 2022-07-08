@@ -12,8 +12,8 @@ using TourPlanner.Data;
 namespace TourPlanner.Data.Migrations
 {
     [DbContext(typeof(ToursDataContext))]
-    [Migration("20220707231349_baseMigration8")]
-    partial class baseMigration8
+    [Migration("20220708113927_base1")]
+    partial class base1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,7 +22,7 @@ namespace TourPlanner.Data.Migrations
                 .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("TourPlanner.Data.Adresses", b =>
                 {
@@ -47,7 +47,7 @@ namespace TourPlanner.Data.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("TourId")
+                    b.Property<Guid>("TourIdStart")
                         .HasColumnType("uuid");
 
                     b.HasKey("AdressId");
@@ -119,11 +119,9 @@ namespace TourPlanner.Data.Migrations
 
                     b.HasKey("TourId");
 
-                    b.HasIndex("TourIdDest")
-                        .IsUnique();
+                    b.HasIndex("TourIdDest");
 
-                    b.HasIndex("TourIdStart")
-                        .IsUnique();
+                    b.HasIndex("TourIdStart");
 
                     b.ToTable("Tours");
                 });
@@ -140,14 +138,14 @@ namespace TourPlanner.Data.Migrations
             modelBuilder.Entity("TourPlanner.Data.Tours", b =>
                 {
                     b.HasOne("TourPlanner.Data.Adresses", "Destination")
-                        .WithOne()
-                        .HasForeignKey("TourPlanner.Data.Tours", "TourIdDest")
+                        .WithMany()
+                        .HasForeignKey("TourIdDest")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TourPlanner.Data.Adresses", "Start")
-                        .WithOne()
-                        .HasForeignKey("TourPlanner.Data.Tours", "TourIdStart")
+                        .WithMany()
+                        .HasForeignKey("TourIdStart")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

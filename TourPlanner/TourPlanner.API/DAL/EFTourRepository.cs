@@ -42,9 +42,12 @@ namespace TourPlanner.API.DAL
         //TODO
         public async Task<List<PresentationTour>> DeleteTourAsync(Guid tourId)
         {
-            var tour = await this._context.Tours.FindAsync(tourId);
+            var tour = await this._context.Tours.Include(tour => tour.Logs).Include(tour => tour.Start).Include(tour => tour.Destination)
+                .FirstOrDefaultAsync(i => i.TourId == tourId);
             if (tour is null) throw new TourNotFoundException();
-            this._context.Tours.Remove(tour); 
+            this._context.Tours.RemoveRange(tour);
+            var adresses = await this._context.Adress.Where(i => i.TourIdStart == tourId).ToListAsync();
+            this._context.Adress.RemoveRange(adresses);
             await this._context.SaveChangesAsync();
 
             return await GetToursAsync();
