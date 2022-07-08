@@ -34,7 +34,7 @@ namespace TourPlanner.API.BL
             #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
             dynamic json = JsonConvert.DeserializeObject<ExpandoObject>(content, new ExpandoObjectConverter());
             #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
-            if (json.route.realTime == -1) throw new InvalidAdressException();
+            if (json.info.statuscode != 0) throw new InvalidAdressException();
             string time = json.route.formattedTime;
             var timeArray = time.Split(":");
             return new MapQuestRouteResult(json.route.distance, new TimeSpan(int.Parse(timeArray[0]), int.Parse(timeArray[1]), int.Parse(timeArray[2])) ,json.route.sessionId);
