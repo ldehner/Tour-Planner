@@ -90,7 +90,6 @@ namespace TourPlannerAPI.Controllers
         public async Task<ActionResult<PresentationTour>> AddTour(SimpleTour tour)
         {
             _logger.LogInformation("API Request - Add new tour");
-            _logger.LogInformation(tour.Start.GetAdressString());
             MapQuestRouteResult result;
             try
             {
@@ -170,7 +169,7 @@ namespace TourPlannerAPI.Controllers
         /// <response code="500">Oops! Problem on our end</response>
         /// <returns>the tour including the log</returns>
         [HttpPost("AddLog/{TourId}")]
-        public async Task<ActionResult<PresentationTour>> AddLog(Guid TourId, SimpleLog log)
+        public async Task<ActionResult<PresentationLog>> AddLog(Guid TourId, SimpleLog log)
         {
             _logger.LogInformation("API Request - Add log to tour " + TourId.ToString());
             try
@@ -228,11 +227,6 @@ namespace TourPlannerAPI.Controllers
                 var result = await _tourLogManager.GetLogAsync(TourId, LogId);
                 return Ok(result);
             }
-            catch (TourNotFoundException)
-            {
-                _logger.LogError("Requested tour " + TourId.ToString() + " not found");
-                return NotFound("Tour not found");
-            }
             catch (LogNotFoundException)
             {
                 _logger.LogError("Requested log " + LogId.ToString() + " not found in tour " + TourId.ToString());
@@ -258,10 +252,21 @@ namespace TourPlannerAPI.Controllers
                 var result = await _tourLogManager.DeleteLogAsync(TourId, LogId);
                 return Ok(result);
             }
-            catch (TourNotFoundException)
+            catch (LogNotFoundException)
             {
-                _logger.LogInformation("Requested tour " + TourId.ToString() + " not found");
-                return NotFound("Tour not found");
+                _logger.LogError("Requested log " + LogId.ToString() + " not found in tour " + TourId.ToString());
+                return NotFound("Log not found");
+            }
+        }
+
+        [HttpPut("UpdateLog/{TourId}/{LogId}")]
+        public async Task<ActionResult<PresentationLog>> UpdateLog(Guid TourId, Guid LogId, SimpleLog log)
+        {
+            _logger.LogInformation("API Request - Update log " + LogId.ToString() + " of tour " + TourId.ToString());
+            try
+            {
+                var result = await _tourLogManager.UpdateLogAsync(TourId, LogId, log);
+                return Ok(result);
             }
             catch (LogNotFoundException)
             {

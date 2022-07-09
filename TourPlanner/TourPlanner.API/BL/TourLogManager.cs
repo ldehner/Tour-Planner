@@ -11,12 +11,12 @@ namespace TourPlanner.API.BL
         {
             _tourLogRepository = tourLogRepository;
         }
-        public async Task<PresentationTour> AddLogAsync(Guid TourId, SimpleLog log)
+        public async Task<PresentationLog> AddLogAsync(Guid TourId, SimpleLog log)
         {
             return await _tourLogRepository.AddLogAsync(TourId, log);
         }
 
-        public async Task<PresentationTour> DeleteLogAsync(Guid tourId, Guid logId)
+        public async Task<List<PresentationLog>> DeleteLogAsync(Guid tourId, Guid logId)
         {
             return await _tourLogRepository.DeleteLogAsync(tourId, logId);
         }
@@ -31,7 +31,7 @@ namespace TourPlanner.API.BL
             return await _tourLogRepository.GetLogsAsync(tourId);
         }
 
-        public async Task<List<PresentationLog>> UpdateLogAsync(Guid tourId, Guid logId, SimpleLog log)
+        public async Task<PresentationLog> UpdateLogAsync(Guid tourId, Guid logId, SimpleLog log)
         {
             return await _tourLogRepository.UpdateLogAsync(tourId, logId, log);
         }

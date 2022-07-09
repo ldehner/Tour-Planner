@@ -10,80 +10,59 @@ namespace TourPlanner.API.DAL
     {
         private ToursDataContext _context;
         public EFTourLogRepository(ToursDataContext toursDataContext) { _context = toursDataContext; }
-        public async Task<PresentationTour> AddLogAsync(Guid TourId, SimpleLog log)
+        public async Task<PresentationLog> AddLogAsync(Guid TourId, SimpleLog log)
         {
             var tour = await this._context.Tours.Include(tour => tour.Logs).Include(tour => tour.Start).Include(tour => tour.Destination)
                 .FirstOrDefaultAsync(i => i.TourId == TourId);
             if (tour is null) throw new TourNotFoundException();
 
-            var newlog = new Logs
-            {
-                TourId = TourId,
-                Comment = log.Comment,
-                Date = log.Date,
-                Rating = log.Rating,
-                Duration = log.Duration.TimeOfDay,
-                Difficulty = log.Difficulty,
-            };
-            tour.Logs.Add(newlog);
+            var logs = await LogConverter.SimpleLogToLogs(log, TourId);
+            tour.Logs.Add(logs);
 
             this._context.SaveChanges();
 
-            return await TourConverter.ToursToPresentationTour(await _context.Tours.Include(i => i.Logs)
-                .FirstOrDefaultAsync(i => i.TourId == TourId)); 
+            return await LogConverter.LogsToPresentationLog(logs); 
         }
 
-        public async Task<PresentationTour> DeleteLogAsync(Guid tourId, Guid logId)
+        public async Task<List<PresentationLog>> DeleteLogAsync(Guid tourId, Guid logId)
         {
-            var tour = await this._context.Tours.FindAsync(tourId);
-            if (tour is null) throw new TourNotFoundException();
-            Logs? findLog = null;
-            tour.Logs.ForEach(log =>
-            {
-                if (log.LogId.CompareTo(logId) == 0) findLog = log;
-            });
-            if (findLog is null) throw new LogNotFoundException();
-            tour.Logs.Remove(findLog);
+            var log = await this._context.Logs
+                .FirstOrDefaultAsync(i => i.TourId == tourId);
+            if (log is null) throw new LogNotFoundException();
+            this._context.Logs.RemoveRange(log);
             await this._context.SaveChangesAsync();
-            return await TourConverter.ToursToPresentationTour(await this._context.Tours.FindAsync(tourId));
+            return await GetLogsAsync(tourId);
         }
 
         public async Task<PresentationLog> GetLogAsync(Guid tourId, Guid logId)
         {
-            var tour = await this._context.Tours.Include(i => i.Logs)
-                .FirstOrDefaultAsync(i => i.TourId == tourId);
-            if (tour is null) throw new TourNotFoundException();
-            Logs? findLog = null;
-            tour.Logs.ForEach(log =>
-            {
-                if (log.LogId.CompareTo(logId) == 0) findLog = log;
-            });
-            if (findLog is null) throw new LogNotFoundException();
-            return await LogConverter.LogsToPresentationLog(findLog);
+            var log = await this._context.Logs
+                .FirstOrDefaultAsync(i => i.TourId == tourId && i.LogId == logId);
+            if (log is null) throw new LogNotFoundException();
+            return await LogConverter.LogsToPresentationLog(log);
         }
 
         public async Task<List<PresentationLog>> GetLogsAsync(Guid tourId)
         {
-            var tour = await this._context.Tours.Include(i => i.Logs)
-                .FirstOrDefaultAsync(i => i.TourId == tourId);
-            if (tour is null) throw new TourNotFoundException();
-            return await LogConverter.LogsListToPresentationLogList(tour.Logs);
+            var logs = await this._context.Logs.Where(i => i.TourId == tourId).ToListAsync();
+            if (logs is null) throw new TourNotFoundException();
+            return await LogConverter.LogsListToPresentationLogList(logs);
         }
 
-        public async Task<List<PresentationLog>> UpdateLogAsync(Guid tourId, Guid logId, SimpleLog log)
+        public async Task<PresentationLog> UpdateLogAsync(Guid tourId, Guid logId, SimpleLog request)
         {
-            var tour = await this._context.Tours.FindAsync(tourId);
-            if (tour is null) throw new TourNotFoundException();
-            Logs? findLog = null;
-            tour.Logs.ForEach(log =>
-            {
-                if (log.LogId.CompareTo(logId) == 0) findLog = log;
-            });
-            if (findLog is null) throw new LogNotFoundException();
-            tour.Logs.Remove(findLog);
-            tour.Logs.Add(await LogConverter.SimpleLogToLogs(log, tourId));
-            await this._context.SaveChangesAsync();
-            return await LogConverter.LogsListToPresentationLogList((await this._context.Tours.FindAsync(tourId)).Logs);
+            var log = await this._context.Logs
+                .FirstOrDefaultAsync(i => i.TourId == tourId && i.LogId == logId);
+            if (log is null) throw new LogNotFoundException();
+            var date = request.Date.Split("-");
+            var time = request.Duration.Split(":");
+            log.Comment = request.Comment;
+            log.Rating = request.Rating;
+            log.Difficulty = request.Difficulty;
+            log.Date = new DateTime(Int16.Parse(date[0]), Int16.Parse(date[1]), Int16.Parse(date[2]));
+            log.Duration = new TimeSpan(Int16.Parse(time[0]), Int16.Parse(time[1]), Int16.Parse(time[2]), 0);
+
+            return await GetLogAsync(tourId, logId);
         }
     }
 }

@@ -8,13 +8,13 @@ namespace TourPlanner.API.Mapping
         public async static Task<SimpleTour> ToursToSimpleTour(Tours tour)
         {
             return new SimpleTour
-            {
-                Name = tour.Name,
-                Description = tour.Description,
-                Type = tour.Type,
-                Start = await AdressConverter.EfToAdressAsync(tour.Start),
-                Destination = await AdressConverter.EfToAdressAsync(tour.Destination)
-            };
+            (
+                tour.Name,
+                tour.Description,
+                tour.Type,
+                await AdressConverter.EfToAdressAsync(tour.Start),
+                await AdressConverter.EfToAdressAsync(tour.Destination)
+            );
         }
 
         public async static Task<PresentationTour> ToursToPresentationTour(Tours tour){
@@ -37,13 +37,13 @@ namespace TourPlanner.API.Mapping
             DateTime dt = new DateTime(2022, 01, 01);
             dt = dt + tour.Duration;
             return new SimpleTour
-            {
-                Name = tour.Name,
-                Description = tour.Description,
-                Type = tour.Type,
-                Start = tour.Start,
-                Destination = tour.Destination,
-            };
+            (
+                tour.Name,
+                tour.Description,
+                tour.Type,
+                tour.Start,
+                tour.Destination
+            );
         }
 
         public async static Task<Tours> PresentationTourToTours(PresentationTour tour)
