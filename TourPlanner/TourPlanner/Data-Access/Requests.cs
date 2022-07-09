@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -23,6 +24,8 @@ namespace Tour_planner.Data_Access
             Tourlist? tourlist = fillTourlist(data);
             return tourlist;
         }
+
+        
 
         public async Task<Tour> GetTourById(string id)
         {
@@ -81,6 +84,47 @@ namespace Tour_planner.Data_Access
 
 
 
+
+        public async Task PostLog(TourLog tourLog)
+        {
+            using var client = new HttpClient();
+
+            string content = $"{{ \"date\": \"\",\"duration\": \"\", \"comment\": \"\", \"difficulty\": 0, \"rating\": 0 }}";
+            var data = new StringContent(content, Encoding.UTF8, "application/json");
+
+
+            string test = await data.ReadAsStringAsync();
+
+            var response = await client.PostAsync(Url + "/AddTour", data);
+
+            var result = response.Content.ReadAsStreamAsync();
+
+            Console.WriteLine(result);
+
+        }
+
+        public async Task GetReport()
+        {
+            using var client = new HttpClient();
+
+            var response = await client.GetAsync(Url + "/TourOverviewReport");
+
+            var result = response.Content.ReadAsByteArrayAsync();
+
+            
+            File.WriteAllBytes("hello.pdf", await result);
+        }
+
+
+        public async Task<byte[]> GetImageBytes(string tourId)
+        {
+            using var client = new HttpClient();
+
+            var response = await client.GetAsync(Url + "/GetMap/" + tourId);
+
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+
         private Tourlist fillTourlist(JArray data)
         {
             var result = new Tourlist();
@@ -89,11 +133,23 @@ namespace Tour_planner.Data_Access
             {
                 Address start = new Address((string)obj["start"]["street"], (string)obj["start"]["houseNumber"], (string)obj["start"]["city"], (string)obj["start"]["plz"], (string)obj["start"]["country"]);
                 Address destination = new Address((string)obj["destination"]["street"], (string)obj["destination"]["houseNumber"], (string)obj["destination"]["city"], (string)obj["destination"]["plz"], (string)obj["destination"]["country"]);
+                Dictionary<string, TourLog> loglist = new();
+                
+                foreach (JObject log in obj["logs"])
+                {
+                    string time = $"{log["duration"]}";
+                    TourLog templog = new TourLog((string)log["logId"],(string)log["tourid"], (string)log["date"], (string)log["comment"], (int)log["difficulty"], time, (int)log["rating"]);
+                    loglist.Add((string)log["logId"], templog);
+                }
+
                 Tour temp = new Tour((string)obj["tourId"], (string)obj["name"], (string)obj["description"], (string)obj["duration"], (double)obj["distance"], (string)obj["type"], start, destination);
+                temp.LogList = loglist; 
                 result.AddTourToList(temp);
             }
 
             return result;
         }
+
+        
     }
 }

@@ -1,0 +1,41 @@
+﻿<Window x:Class="Tour_planner.UI.Views.CreateTourLog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Tour_planner.UI.Views"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:viewmodels="clr-namespace:Tour_planner.UI.ViewModels"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="CreateTourLog" Height="450" Width="400">
+    <Grid>
+        <StackPanel Margin="10">
+            <Label FontSize="20">Create Tourlog</Label>
+            <DatePicker Margin="0 30 0 0" Height="Auto" materialDesign:HintAssist.Hint="Date" materialDesign:HintAssist.HelperText="This Field is required"  Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+            <materialDesign:TimePicker Margin="0 20 0 0" materialDesign:HintAssist.Hint="Duration" materialDesign:HintAssist.HelperText="This Field is required" Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
+            <TextBox Margin="0 20 0 0" Text="{Binding newTourModel.Name, UpdateSourceTrigger=PropertyChanged}" x:Name="NameCreateTextBox" materialDesign:HintAssist.Hint="Comment"/>
+            <ComboBox Text="{Binding newTourModel.Type,  UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="OutlinedComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}"  materialDesign:HintAssist.Hint="Rating">
+                <ComboBoxItem>Very Bad</ComboBoxItem>
+                <ComboBoxItem>Bad</ComboBoxItem>
+                <ComboBoxItem IsSelected="True">Moderate</ComboBoxItem>
+                <ComboBoxItem>Good</ComboBoxItem>
+                <ComboBoxItem>Very Good</ComboBoxItem>
+            </ComboBox>
+            <ComboBox Text="{Binding newTourModel.Type,  UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="ComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}"  materialDesign:HintAssist.Hint="Difficulty">
+                <ComboBoxItem>Very Hard</ComboBoxItem>
+                <ComboBoxItem>Hard</ComboBoxItem>
+                <ComboBoxItem IsSelected="True">Moderate</ComboBoxItem>
+                <ComboBoxItem>Easy</ComboBoxItem>
+                <ComboBoxItem>Very Easy</ComboBoxItem>
+            </ComboBox>
+            
+        </StackPanel> 
+        
+    </Grid>
+</Window>

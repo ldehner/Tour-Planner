@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Tour_planner.Business;
@@ -17,16 +19,31 @@ namespace Tour_planner.UI.ViewModels
 
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private Visibility visibility = Visibility.Collapsed;
 
         private IQuery requests;
         private TourModel _tour;
         private bool _isSelected = false;
 
 
+
+        public Visibility Visibility
+        {
+            get { return visibility; }
+            set { visibility = value; OnPropertyChanged("Visibility"); }
+        }
         public bool isSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; OnPropertyChanged("isSelected"); }
+            set { _isSelected = value; OnPropertyChanged("isSelected"); 
+                if (value == true) { 
+                    Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Visibility = Visibility.Collapsed;
+                } 
+            }
         }
         public TourModel? TourModel
         {
@@ -59,6 +76,7 @@ namespace Tour_planner.UI.ViewModels
 
         public async void LoadTours()
         {
+            //await requests.GetReport();
             Tourlist tourList = await requests.GetTours();
 
             if(tourList != null)
@@ -71,6 +89,11 @@ namespace Tour_planner.UI.ViewModels
 
                 foreach(Tour t in data)
                 {
+                    byte[] img = await requests.GetImageBytes(t.Id);
+
+                    
+                    File.WriteAllBytes(t.Name + ".jpg", img);
+
                     _tourList.AddTourToList(t, image);
                 }
             }

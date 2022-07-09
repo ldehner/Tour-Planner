@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,8 @@ namespace Tour_planner.UI.Models
         private Address _start { get; set; }
         private Address _destination { get; set; }
         private BitmapImage _image { get; set; }
-        private string _route { get; set; }
+        
+        public Dictionary<string, TourLog> LogList { get; set; }
 
 
         public TourModel()
@@ -38,6 +40,16 @@ namespace Tour_planner.UI.Models
             Type = tour.Type;
             Start = tour.Start;
             Destination = tour.Destination;
+            LogList = tour.LogList;
+
+            TourLogList = new ObservableCollection<TourLogModel>();
+
+            foreach (KeyValuePair<string, TourLog> entry in LogList)
+            {
+                TourLogModel newtourLog = new TourLogModel(entry.Value);
+
+                TourLogList.Add(newtourLog);
+            }
 
         }
 
@@ -63,8 +75,19 @@ namespace Tour_planner.UI.Models
         public string TravelRoute { get { return Start.FullAddress + " - " + Destination.FullAddress; } }
         public string DistanceCalucalted { get { return "Estimated distance: " + Math.Round(Distance, 2) + " km"; } }
         public string DurationCalculated { get { return "Estimated duration: " + Duration.ToString(); } }
-        
 
+
+        private ObservableCollection<TourLogModel> _tourLogList;
+
+        public ObservableCollection<TourLogModel> TourLogList
+        {
+            get
+            {
+                return _tourLogList;
+            }
+
+            set { _tourLogList = value; }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(string propertyName)

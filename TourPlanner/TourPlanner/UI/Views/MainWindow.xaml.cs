@@ -64,5 +64,10 @@ namespace Tour_planner.UI.Views
             deleteTour.Owner = this;
             deleteTour.Show();
         }
+
+        private void OpenTourLog(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
