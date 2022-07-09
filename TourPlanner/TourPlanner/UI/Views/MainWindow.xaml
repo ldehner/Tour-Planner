@@ -85,9 +85,10 @@
                 <Button DockPanel.Dock="Left" Visibility="{Binding Visibility}"  Width="120" HorizontalAlignment="Left" Content="Update Tour" Click="OpenChangeWindow" ></Button>
                 <Button DockPanel.Dock="Right" Visibility="{Binding Visibility}"  Width="120" HorizontalAlignment="Left" Content="Add Log" Click="OpenTourLog" ></Button>
             </DockPanel>
+            
             <ScrollViewer Height="200">
 
-                <DataGrid Visibility="{Binding Visibility}" IsReadOnly="True" SelectionUnit="FullRow" Margin="10" MaxHeight="200"  Name="LogGrid" ItemsSource="{Binding TourModel.TourLogList}" AutoGenerateColumns="False" GridLinesVisibility="None" BorderThickness="0">
+                <DataGrid SelectedItem="{Binding TourLogModel}" Visibility="{Binding Visibility}" IsReadOnly="True" SelectionUnit="FullRow" Margin="10" MaxHeight="200"  Name="LogGrid" ItemsSource="{Binding TourModel.TourLogList}" AutoGenerateColumns="False" GridLinesVisibility="None" BorderThickness="0">
 
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -108,6 +109,10 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
+            <DockPanel>
+                <Button DockPanel.Dock="Left" Visibility="{Binding LogVisibility}"  Width="120" HorizontalAlignment="Left" Content="Update Log" ></Button>
+                <Button DockPanel.Dock="Right" Visibility="{Binding LogVisibility}"  Width="120" HorizontalAlignment="Left" Content="Delete Log" Click="OpenTourLogDelete" ></Button>
+            </DockPanel>
         </StackPanel>
         
 

@@ -85,21 +85,35 @@ namespace Tour_planner.Data_Access
 
 
 
-        public async Task PostLog(TourLog tourLog)
+        public async Task PostLog(TourLog tourLog, string TourId)
         {
             using var client = new HttpClient();
 
-            string content = $"{{ \"date\": \"\",\"duration\": \"\", \"comment\": \"\", \"difficulty\": 0, \"rating\": 0 }}";
+            string content = $"{{ \"date\": \"{tourLog.Date}\",\"duration\": \"{tourLog.Time}\", \"comment\": \"{tourLog.Comment}\", \"difficulty\": {tourLog.Difficulty}, \"rating\": {tourLog.Rating} }}";
             var data = new StringContent(content, Encoding.UTF8, "application/json");
 
 
             string test = await data.ReadAsStringAsync();
 
-            var response = await client.PostAsync(Url + "/AddTour", data);
+            var response = await client.PostAsync(Url + "/AddLog/"+TourId, data);
 
             var result = response.Content.ReadAsStreamAsync();
 
             Console.WriteLine(result);
+
+        }
+
+        public void DeleteLog(string TourId, string LogId)
+        {
+            using var client = new HttpClient();
+
+            var response = client.DeleteAsync(Url + "/DeleteLog/" + TourId + "/" + LogId);
+
+            var result = response.Result;
+        }
+
+        public async Task UpdateLog(TourLog log, string Logid)
+        {
 
         }
 

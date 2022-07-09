@@ -67,7 +67,19 @@ namespace Tour_planner.UI.Views
 
         private void OpenTourLog(object sender, RoutedEventArgs e)
         {
+            CreateTourLog createLog = new CreateTourLog();
+            CreateTourLogViewModel createTourLogViewModel = new CreateTourLogViewModel(viewModel.TourModel.Id);
+            createLog.DataContext = createTourLogViewModel;
 
+            createLog.Owner = this;
+            createLog.Show();
+        }
+        private void OpenTourLogDelete(object sender, RoutedEventArgs e)
+        {
+            DeleteTourLog deleteTourLog = new DeleteTourLog();
+            deleteTourLog.DataContext = this.DataContext;
+            deleteTourLog.Owner = this;
+            deleteTourLog.Show();
         }
     }
 }

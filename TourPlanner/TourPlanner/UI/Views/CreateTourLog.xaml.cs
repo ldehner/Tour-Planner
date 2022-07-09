@@ -23,5 +23,9 @@ namespace Tour_planner.UI.Views
         {
             InitializeComponent();
         }
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

@@ -46,31 +46,58 @@ namespace Tour_planner.UI.ViewModels
         {
             try
             {
-                if (CheckForImputs())
+                if (CheckForInputs())
                 {
                     throw new ArgumentException("Imput cannot be empty");
                 }
                 else
                 {
+                    if (string.IsNullOrEmpty(NewTourLogModel.RatingInput))
+                    {
+                        NewTourLogModel.Rating = 0;
+                    }
+                    else
+                    {
+                        NewTourLogModel.SetRatingByString();
+                    }
+                    if (string.IsNullOrEmpty(NewTourLogModel.DifficultyInput))
+                    {
+                        NewTourLogModel.Difficulty = 0;
+                    }
+                    else
+                    {
+                        NewTourLogModel.SetDifficultyByString();
+                    }
+
+                    
+                    
                     TourLog tourLog = new TourLog();
                     tourLog.TourId = TourId;
                     tourLog.Difficulty = NewTourLogModel.Difficulty;
                     tourLog.Rating = NewTourLogModel.Rating;
                     tourLog.Comment = NewTourLogModel.Comment;
-                    tourLog.Time = NewTourLogModel.Time;
-                    tourLog.Date = NewTourLogModel.Date;
-                    requets.PostLog(tourLog);
+                    tourLog.Time = NewTourLogModel.TimeTime.ToString("dd-HH-mm");
+                    tourLog.Date = NewTourLogModel.DateTime.ToString("yyyy-MM-dd");
+
+                    requets.PostLog(tourLog, TourId);
 
                 }
             }
             catch
             {
-
+                
             }
         }
-        private bool CheckForImputs()
+        private bool CheckForInputs()
         {
-            return true;
+            if (string.IsNullOrEmpty(NewTourLogModel.DateTime.ToString()) || string.IsNullOrEmpty(NewTourLogModel.TimeTime.ToString()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

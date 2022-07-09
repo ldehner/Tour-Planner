@@ -15,7 +15,9 @@ namespace Tour_planner.Data_Access
         public void DeleteTour(string Id);
         public Task UpdateTour(Tour newtour, string oldId);
         public Task<Tourlist> GetToursBySearchTerm(string searchTerm);
-        public Task PostLog(TourLog tourLog);
+        public Task PostLog(TourLog tourLog, string TourId);
+        public void DeleteLog(string TourId,string LogId);
+        public Task UpdateLog(TourLog log, string Logid);
         public Task GetReport();
         public Task<byte[]> GetImageBytes(string tourId);
     }

@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace Tour_planner.UI.Views
 {
     /// <summary>
-    /// Interaktionslogik für DeleteTour.xaml
+    /// Interaktionslogik für ChangeTourLog.xaml
     /// </summary>
-    public partial class DeleteTour : Window
+    public partial class ChangeTourLog : Window
     {
-        public DeleteTour()
+        public ChangeTourLog()
         {
             InitializeComponent();
         }

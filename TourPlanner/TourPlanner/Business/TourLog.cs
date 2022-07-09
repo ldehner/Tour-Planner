@@ -16,7 +16,8 @@ namespace Tour_planner.Business
         public int Difficulty { get; set; }
         public string? Time { get; set; }
         public int Rating { get; set; }
-       
+        
+
         public TourLog()
         {
 

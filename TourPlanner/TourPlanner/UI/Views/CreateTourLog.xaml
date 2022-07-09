@@ -13,28 +13,31 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="CreateTourLog" Height="450" Width="400">
+        Title="CreateTourLog" Height="480" Width="400">
     <Grid>
         <StackPanel Margin="10">
             <Label FontSize="20">Create Tourlog</Label>
-            <DatePicker Margin="0 30 0 0" Height="Auto" materialDesign:HintAssist.Hint="Date" materialDesign:HintAssist.HelperText="This Field is required"  Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
-            <materialDesign:TimePicker Margin="0 20 0 0" materialDesign:HintAssist.Hint="Duration" materialDesign:HintAssist.HelperText="This Field is required" Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
-            <TextBox Margin="0 20 0 0" Text="{Binding newTourModel.Name, UpdateSourceTrigger=PropertyChanged}" x:Name="NameCreateTextBox" materialDesign:HintAssist.Hint="Comment"/>
-            <ComboBox Text="{Binding newTourModel.Type,  UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="OutlinedComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}"  materialDesign:HintAssist.Hint="Rating">
+            <DatePicker SelectedDate="{Binding NewTourLogModel.DateTime}" Margin="0 30 0 0" Height="Auto" materialDesign:HintAssist.Hint="Date" materialDesign:HintAssist.HelperText="This Field is required"  Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+            <materialDesign:TimePicker Text="{Binding NewTourLogModel.TimeTime}" Margin="0 20 0 0" materialDesign:HintAssist.Hint="Duration" materialDesign:HintAssist.HelperText="This Field is required" Style="{StaticResource MaterialDesignOutlinedTimePicker}" />
+            <TextBox Margin="0 20 0 0" Text="{Binding NewTourLogModel.Comment, UpdateSourceTrigger=PropertyChanged}" x:Name="NameCreateTextBox" materialDesign:HintAssist.Hint="Comment"/>
+            <ComboBox Text="{Binding NewTourLogModel.RatingInput,  UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="OutlinedComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}"  materialDesign:HintAssist.Hint="Rating">
                 <ComboBoxItem>Very Bad</ComboBoxItem>
                 <ComboBoxItem>Bad</ComboBoxItem>
-                <ComboBoxItem IsSelected="True">Moderate</ComboBoxItem>
+                <ComboBoxItem>Moderate</ComboBoxItem>
                 <ComboBoxItem>Good</ComboBoxItem>
                 <ComboBoxItem>Very Good</ComboBoxItem>
             </ComboBox>
-            <ComboBox Text="{Binding newTourModel.Type,  UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="ComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}"  materialDesign:HintAssist.Hint="Difficulty">
+            <ComboBox Text="{Binding NewTourLogModel.DifficultyInput,  UpdateSourceTrigger=PropertyChanged}" Margin="0 30 0 0" x:Name="ComboBox" Style="{StaticResource MaterialDesignOutlinedComboBox}"  materialDesign:HintAssist.Hint="Difficulty">
                 <ComboBoxItem>Very Hard</ComboBoxItem>
                 <ComboBoxItem>Hard</ComboBoxItem>
-                <ComboBoxItem IsSelected="True">Moderate</ComboBoxItem>
+                <ComboBoxItem>Moderate</ComboBoxItem>
                 <ComboBoxItem>Easy</ComboBoxItem>
                 <ComboBoxItem>Very Easy</ComboBoxItem>
             </ComboBox>
-            
+            <DockPanel Margin="0 15 0 5">
+                <Button Click="CloseWindow" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignRaisedDarkButton}" Content="Cancel" Width="81"/>
+                <Button Click="CloseWindow" Command="{Binding SaveLogCommand}" DockPanel.Dock="Right" Style="{StaticResource MaterialDesignRaisedSecondaryButton}" Width="83" Content="Save" />
+            </DockPanel>
         </StackPanel> 
         
     </Grid>

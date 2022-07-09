@@ -20,10 +20,13 @@ namespace Tour_planner.UI.ViewModels
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private Visibility visibility = Visibility.Collapsed;
+        private Visibility logVisibility = Visibility.Collapsed; 
 
         private IQuery requests;
         private TourModel _tour;
+        private TourLogModel _log;
         private bool _isSelected = false;
+        private bool _isLogSelected = false;
 
 
 
@@ -31,6 +34,12 @@ namespace Tour_planner.UI.ViewModels
         {
             get { return visibility; }
             set { visibility = value; OnPropertyChanged("Visibility"); }
+        }
+
+        public Visibility LogVisibility
+        {
+            get { return logVisibility; }
+            set { logVisibility = value; OnPropertyChanged("LogVisibility"); }
         }
         public bool isSelected
         {
@@ -45,6 +54,22 @@ namespace Tour_planner.UI.ViewModels
                 } 
             }
         }
+
+        public bool isLogSelected
+        {
+            get { return _isLogSelected; }
+            set { _isLogSelected = value; OnPropertyChanged("isLogSelected");
+                if (value == true)
+                {
+                    LogVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    LogVisibility = Visibility.Collapsed;
+                }
+            }
+        }
+
         public TourModel? TourModel
         {
             get { return _tour; }
@@ -57,6 +82,20 @@ namespace Tour_planner.UI.ViewModels
                 }
             }
         }
+        public TourLogModel? TourLogModel 
+        { 
+            get { return _log; } 
+            set { 
+                if(value != null)
+                {
+                    _log = value;
+                    isLogSelected = true;
+                    OnPropertyChanged("TourLogModel");
+                }
+            
+            } 
+        }
+
 
         private TourListModel _tourList;
 
@@ -140,9 +179,27 @@ namespace Tour_planner.UI.ViewModels
                 LoadTours();
             }
         }
+        private ICommand _deleteLogCommand;
 
+        public ICommand DeleteLogCommand
+        {
+            get
+            {
+                if(_deleteLogCommand != null)
+                {
+                    return _deleteLogCommand;
+                }
+                return new Command(() => DeleteLog(), true);
+            }
+        }
 
-
+        public void DeleteLog()
+        {
+            if(TourLogModel != null && TourModel != null)
+            {
+                requests.DeleteLog(TourModel.Id, TourLogModel.Logid); ;
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         
