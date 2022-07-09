@@ -18,6 +18,7 @@
 
         public static async Task<Adress> EfToAdressAsync(TourPlanner.Data.Adresses adress)
         {
+            if (adress is null) return null;
             var tmp = new Adress(adress.City, adress.Country);
             if (adress.Street is not null) tmp.Street = adress.Street;
             if (adress.HouseNumber is not null) tmp.HouseNumber = adress.HouseNumber;

@@ -15,13 +15,13 @@ var optionsBuilder = new DbContextOptionsBuilder<ToursDataContext>();
 optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("TourPlannerDb"));
 
 // Tour Manager & Repositories
-var tourRepository = new EFTourRepository(new ToursDataContext(optionsBuilder.Options));
+var tourRepository = new EFTourRepository(optionsBuilder.Options);
 var pdfTemplateRepository = new PdfTemplateRepository(System.IO.Directory.GetCurrentDirectory());
 var tourManager = new TourManager(tourRepository, pdfTemplateRepository);
 builder.Services.Add(new ServiceDescriptor(typeof(ITourManager), tourManager));
 
 // Log Manager & Repository
-var tourLogRepository = new EFTourLogRepository(new ToursDataContext(optionsBuilder.Options));
+var tourLogRepository = new EFTourLogRepository(optionsBuilder.Options);
 var tourLogManager = new TourLogManager(tourLogRepository);
 builder.Services.Add(new ServiceDescriptor(typeof(ITourLogManager), tourLogManager));
 
