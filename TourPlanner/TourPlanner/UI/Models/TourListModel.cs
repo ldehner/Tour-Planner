@@ -26,6 +26,7 @@ namespace Tour_planner.UI.Models
         {
             TourModel tour = new TourModel(t);
 
+            
             tour.Image = image;
 
             Tlist.Add(tour);

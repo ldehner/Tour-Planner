@@ -20,15 +20,15 @@ namespace Tour_planner.UI.ViewModels
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private Visibility visibility = Visibility.Collapsed;
-        private Visibility logVisibility = Visibility.Collapsed; 
-
+        private Visibility logVisibility = Visibility.Collapsed;
+        private Visibility errorMsgVisibility = Visibility.Collapsed;
         private IQuery requests;
         private TourModel _tour;
         private TourLogModel _log;
         private bool _isSelected = false;
         private bool _isLogSelected = false;
-
-
+        private string _searchText;
+        private string _errmsg;
 
         public Visibility Visibility
         {
@@ -41,24 +41,35 @@ namespace Tour_planner.UI.ViewModels
             get { return logVisibility; }
             set { logVisibility = value; OnPropertyChanged("LogVisibility"); }
         }
+
+        public Visibility ErrorMsgVisibility
+        {
+            get { return errorMsgVisibility; }
+            set { errorMsgVisibility = value; OnPropertyChanged("ErrorMsgVisibility"); }
+        }
         public bool isSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; OnPropertyChanged("isSelected"); 
-                if (value == true) { 
+            set
+            {
+                _isSelected = value; OnPropertyChanged("isSelected");
+                if (value == true)
+                {
                     Visibility = Visibility.Visible;
                 }
                 else
                 {
                     Visibility = Visibility.Collapsed;
-                } 
+                }
             }
         }
 
         public bool isLogSelected
         {
             get { return _isLogSelected; }
-            set { _isLogSelected = value; OnPropertyChanged("isLogSelected");
+            set
+            {
+                _isLogSelected = value; OnPropertyChanged("isLogSelected");
                 if (value == true)
                 {
                     LogVisibility = Visibility.Visible;
@@ -73,27 +84,34 @@ namespace Tour_planner.UI.ViewModels
         public TourModel? TourModel
         {
             get { return _tour; }
-            set {
+            set
+            {
                 if (value != null)
                 {
                     _tour = value;
                     isSelected = true;
+                    if (TourLogModel != null)
+                    {
+                        TourLogModel = null;
+                        LogVisibility = Visibility.Collapsed;
+                    }
                     OnPropertyChanged("TourModel");
                 }
             }
         }
-        public TourLogModel? TourLogModel 
-        { 
-            get { return _log; } 
-            set { 
-                if(value != null)
+        public TourLogModel? TourLogModel
+        {
+            get { return _log; }
+            set
+            {
+                if (value != null)
                 {
                     _log = value;
                     isLogSelected = true;
                     OnPropertyChanged("TourLogModel");
                 }
-            
-            } 
+
+            }
         }
 
 
@@ -102,9 +120,31 @@ namespace Tour_planner.UI.ViewModels
         public ObservableCollection<TourModel> TourList
         {
             get { return _tourList.Tourlist; }
-            set { _tourList.Tourlist = value;}
+            set { _tourList.Tourlist = value; }
         }
 
+        public string SearchText
+        {
+            get { return _searchText; }
+            set { _searchText = value; }
+        }
+
+
+        public string ErrorMsg
+        {
+            get { return _errmsg; }
+            set { 
+                _errmsg = value; 
+                if(value != "")
+                {
+                    ErrorMsgVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    ErrorMsgVisibility = Visibility.Collapsed;
+                }
+                OnPropertyChanged("ErrorMsg"); }
+        }
 
         public MainWindowViewModel()
         {
@@ -115,50 +155,104 @@ namespace Tour_planner.UI.ViewModels
 
         public async void LoadTours()
         {
-            
+
             Tourlist tourList = await requests.GetTours();
 
-            if(tourList != null)
+            if (tourList != null)
             {
+
+                DirectoryInfo di = new DirectoryInfo("../../../img");
+
+
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+
+
                 _tourList.Tourlist.Clear();
 
                 Dictionary<string, Tour>.ValueCollection data = tourList.TourList.Values;
 
-                BitmapImage image = new BitmapImage();
 
-                foreach(Tour t in data)
+
+                foreach (Tour t in data)
                 {
                     string img = await requests.GetImageBytes(t.Id);
 
                     string result = img.Substring(1, img.Length - 2);
+                    BitmapImage image = new BitmapImage();
+                    byte[] binaryImg;
 
-                    byte[] binaryImg = Convert.FromBase64String(result);
+                    binaryImg = Convert.FromBase64String(result);
 
-                    
-                    File.WriteAllBytes(t.Id + ".jpg", binaryImg);
+                    if (result != "")
+                    {
+                        image.BeginInit();
+                        image.StreamSource = new MemoryStream(binaryImg);
+                        image.EndInit();
+
+                    }
+
+
+                    string location = "../../../img/" + t.Id + ".jpg";
+
+                    File.WriteAllBytes(location, binaryImg);
+
+
+
+
+
 
                     _tourList.AddTourToList(t, image);
                 }
             }
-            CreateReport();
+
         }
 
-        public async void LoadSearchedTours(string searchTerm)
+        private ICommand searchTours;
+
+        public ICommand SearchTours
         {
-            Tourlist searchedTourList = await requests.GetToursBySearchTerm(searchTerm);
-
-            if(searchedTourList != null)
+            get 
             {
-                _tourList.Tourlist.Clear();
-
-                Dictionary<string, Tour>.ValueCollection data = searchedTourList.TourList.Values;
-
-                BitmapImage image = new BitmapImage();
-
-                foreach (Tour t in data)
-                {
-                    _tourList.AddTourToList(t, image);
+                if (searchTours != null) {
+                    return searchTours;
                 }
+                searchTours = new Command(() => LoadSearchedTours(), true);
+                return searchTours;
+            }
+        }
+
+        public async void LoadSearchedTours()
+        {
+            try
+            {
+                ErrorMsg = "";
+                _tourList.Tourlist.Clear();
+                Tourlist searchedTourList = await requests.GetToursBySearchTerm(_searchText);
+
+                if (searchedTourList != null)
+                {
+                    
+
+                    Dictionary<string, Tour>.ValueCollection data = searchedTourList.TourList.Values;
+
+                    BitmapImage image = new BitmapImage();
+
+                    foreach (Tour t in data)
+                    {
+                        _tourList.AddTourToList(t, image);
+                    }
+                }
+            }
+            catch
+            {
+                ErrorMsg = "No Tours Found!";
             }
         }
 
@@ -166,19 +260,19 @@ namespace Tour_planner.UI.ViewModels
 
         public ICommand DeleteTourCommand
         {
-            get 
-            { 
-                if(_deleteTourCommand != null)
+            get
+            {
+                if (_deleteTourCommand != null)
                 {
                     return _deleteTourCommand;
                 }
-                return new Command(() => DeleteTour(), true); 
+                return new Command(() => DeleteTour(), true);
             }
-           
+
         }
         public void DeleteTour()
         {
-            if(TourModel != null)
+            if (TourModel != null)
             {
                 requests.DeleteTour(TourModel.Id);
                 LoadTours();
@@ -192,7 +286,7 @@ namespace Tour_planner.UI.ViewModels
         {
             get
             {
-                if(_deleteLogCommand != null)
+                if (_deleteLogCommand != null)
                 {
                     return _deleteLogCommand;
                 }
@@ -202,14 +296,14 @@ namespace Tour_planner.UI.ViewModels
 
         public void DeleteLog()
         {
-            if(TourLogModel != null && TourModel != null)
+            if (TourLogModel != null && TourModel != null)
             {
                 requests.DeleteLog(TourModel.Id, TourLogModel.Logid); ;
             }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        
+
 
         public async void CreateReport()
         {
@@ -220,7 +314,7 @@ namespace Tour_planner.UI.ViewModels
             byte[] pdf = Convert.FromBase64String(result);
 
 
-            File.WriteAllBytes("AllTourReport.pdf",pdf);
+            File.WriteAllBytes("AllTourReport.pdf", pdf);
 
         }
 

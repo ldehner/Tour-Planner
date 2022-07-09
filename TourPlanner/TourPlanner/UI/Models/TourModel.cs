@@ -21,7 +21,33 @@ namespace Tour_planner.UI.Models
         private Address _start { get; set; }
         private Address _destination { get; set; }
         private BitmapImage _image { get; set; }
-        
+        private string _imageLocation { get; set; }
+
+
+        public BitmapImage Image{
+            get
+            {
+                return _image;
+            }
+            set
+            {
+                _image = value;
+                OnPropertyChanged("Image");
+            }
+        }
+
+        public string ImageLocation
+        {
+            get
+            {
+                return _imageLocation;
+            }
+            set
+            {
+                _imageLocation = value;
+                OnPropertyChanged("ImageLocation");
+            }
+        }
         public Dictionary<string, TourLog> LogList { get; set; }
 
 
@@ -71,7 +97,6 @@ namespace Tour_planner.UI.Models
         public string DestinationHouseNumber { get { return Destination.HouseNumber; } set { Destination.HouseNumber = value; } }
         public double Distance { get { return _distance; } set { _distance = value; OnPropertyChanged(Distance.ToString()); } }
         public string Duration { get { return _duration; } set { _duration = value; OnPropertyChanged(Duration.ToString()); } }
-        public BitmapImage Image { get { return _image; } set { _image = value; } }
         public string TravelRoute { get { return Start.FullAddress + " - " + Destination.FullAddress; } }
         public string DistanceCalucalted { get { return "Estimated distance: " + Math.Round(Distance, 2) + " km"; } }
         public string DurationCalculated { get { return "Estimated duration: " + Duration.ToString(); } }

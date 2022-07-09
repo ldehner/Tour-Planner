@@ -72,9 +72,14 @@ namespace Tour_planner.Data_Access
 
         }
 
-        public Task<Tourlist> GetToursBySearchTerm(string searchTerm)
+        public async Task<Tourlist> GetToursBySearchTerm(string searchTerm)
         {
-            throw new NotImplementedException();
+            using var client = new HttpClient();
+
+            var response = await client.GetStringAsync(Url + "/search/"+searchTerm);
+            JArray data = JArray.Parse(response);
+            Tourlist? tourlist = fillTourlist(data);
+            return tourlist;
         }
 
 
