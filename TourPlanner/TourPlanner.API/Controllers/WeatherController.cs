@@ -29,8 +29,8 @@ namespace TourPlanner.API.Controllers
         /// <summary>
         /// Gets the weather of start city and destination city
         /// </summary>
-        /// <param name="start">the start city</param>
-        /// <param name="destination">the destination city</param>
+        /// <param name="start">City, Country</param>
+        /// <param name="destination">City, Country</param>
         /// <response code="200">Success - Weather returned</response>
         /// <response code="404">Invalid Adress</response>
         /// <response code="500">Oops! Problem on our end</response>
