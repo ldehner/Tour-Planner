@@ -70,7 +70,7 @@ namespace Tour_planner.Data_Access
 
             string content = $"{{ \"name\" : \"{newtour.Name}\" , \"description\" : \"{newtour.Description}\" , \"type\" : \"{newtour.Type}\" , \"start\" : {{ \"street\" : \"{newtour.Start.Street}\", \"houseNumber\" : \"{newtour.Start.HouseNumber}\", \"plz\" : \"{newtour.Start.PostalCode}\" , \"city\" : \"{newtour.Start.City}\", \"country\" : \"{newtour.Start.Country}\" }}, \"destination\" : {{ \"street\" : \"{newtour.Destination.Street}\", \"houseNumber\" : \"{newtour.Destination.HouseNumber}\", \"plz\" : \"{newtour.Destination.PostalCode}\" , \"city\" : \"{newtour.Destination.City}\", \"country\" : \"{newtour.Destination.Country}\" }} }}";
             var data = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync(Url, data);
+            var response = await client.PutAsync(Url +"/UpdateTour/"+oldId, data);
 
             var result = await response.Content.ReadAsStringAsync();
             Console.WriteLine(result);
@@ -114,7 +114,14 @@ namespace Tour_planner.Data_Access
 
         public async Task UpdateLog(TourLog log, string Logid)
         {
+            using var client = new HttpClient();
 
+            string content = $"{{ \"date\" : \"{log.Date}\" , \"duration\" : \"{log.Time}\" , \"comment\" : \"{log.Comment}\" , \"difficulty\" : {log.Difficulty}, \"rating\" : {log.Rating} }}";
+            var data = new StringContent(content, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync(Url, data);
+
+            var result = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(result);
         }
 
         public async Task GetReport()

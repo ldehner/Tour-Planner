@@ -18,12 +18,13 @@ namespace Tour_planner.UI.ViewModels
 
         private IQuery requets;
         private TourModel _newtourModel;
+        private MainWindowViewModel reloadModel;
 
-
-        public CreateTourViewModel()
+        public CreateTourViewModel(ref MainWindowViewModel reloadModel)
         {
             requets = new Requests();
             _newtourModel = new TourModel();
+            this.reloadModel = reloadModel;
         }
 
 
@@ -70,7 +71,8 @@ namespace Tour_planner.UI.ViewModels
                     tour.Description = _newtourModel.Description;
 
                     requets.PostTour(tour);
-
+                    System.Threading.Thread.Sleep(4500); //Mapquest is so damn slow
+                    reloadModel.LoadTours();
                 }
             }
             catch
@@ -79,7 +81,7 @@ namespace Tour_planner.UI.ViewModels
             }
         }
 
-        public Action CloseAction { get; set; }
+        
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

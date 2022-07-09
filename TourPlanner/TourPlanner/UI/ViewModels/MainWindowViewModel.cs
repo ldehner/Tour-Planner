@@ -102,7 +102,7 @@ namespace Tour_planner.UI.ViewModels
         public ObservableCollection<TourModel> TourList
         {
             get { return _tourList.Tourlist; }
-            set { _tourList.Tourlist = value; }
+            set { _tourList.Tourlist = value;}
         }
 
 
@@ -131,7 +131,7 @@ namespace Tour_planner.UI.ViewModels
                     byte[] img = await requests.GetImageBytes(t.Id);
 
                     
-                    File.WriteAllBytes(t.Name + ".jpg", img);
+                    //File.WriteAllBytes(t.Name + ".jpg", img);
 
                     _tourList.AddTourToList(t, image);
                 }
@@ -177,6 +177,8 @@ namespace Tour_planner.UI.ViewModels
             {
                 requests.DeleteTour(TourModel.Id);
                 LoadTours();
+                TourModel = null;
+                isSelected = false;
             }
         }
         private ICommand _deleteLogCommand;

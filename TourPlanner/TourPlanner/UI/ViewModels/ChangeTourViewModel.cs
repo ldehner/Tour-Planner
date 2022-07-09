@@ -18,11 +18,14 @@ namespace Tour_planner.UI.ViewModels
         private TourModel currenttourModel;
         private string Id;
 
-        public ChangeTourViewModel(TourModel tour)
+        private MainWindowViewModel reloadModel;
+
+        public ChangeTourViewModel(TourModel tour, ref MainWindowViewModel reload)
         {
             requets = new Requests();
             CurrentTour = tour;
             Id = tour.Id;
+            reloadModel = reload;
         }
 
         public TourModel CurrentTour
@@ -78,7 +81,8 @@ namespace Tour_planner.UI.ViewModels
                     tour.Description = currenttourModel.Description;
 
                     requets.UpdateTour(tour, Id);
-
+                    System.Threading.Thread.Sleep(4500); //Mapquest is so damn slow
+                    reloadModel.LoadTours();
                 }
             }
             catch
@@ -86,7 +90,7 @@ namespace Tour_planner.UI.ViewModels
                 throw new Exception();
             }
         }
-
+        
         private bool CheckForImputs()
         {
             if (string.IsNullOrEmpty(currenttourModel.Name) && string.IsNullOrEmpty(currenttourModel.StartCountry) && string.IsNullOrEmpty(currenttourModel.StartCity) &&

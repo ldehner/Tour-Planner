@@ -71,14 +71,14 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Grid.Column="2" Grid.Row="2">
+        <StackPanel Grid.Column="2" Grid.Row="2" Visibility="{Binding Visibility}" >
             <DockPanel >
                 <Label DockPanel.Dock="Left" Content="{Binding TourModel.Name, Mode=OneWay}" FontSize="24" FontWeight="Bold" ></Label>
             </DockPanel>
 
-            <Label Content="{Binding TourModel.TravelRoute}" FontSize="14" ></Label>
-            <Label Content="{Binding TourModel.DurationCalculated}" FontSize="14"></Label>
-            <Label Content="{Binding TourModel.DistanceCalucalted}" FontSize="14"></Label>
+            <Label Content="{Binding TourModel.TravelRoute, Mode=OneWay}" FontSize="14" ></Label>
+            <Label Content="{Binding TourModel.DurationCalculated, Mode=OneWay}" FontSize="14"></Label>
+            <Label Content="{Binding TourModel.DistanceCalucalted, Mode=OneWay}" FontSize="14"></Label>
             <Label Visibility="{Binding Visibility}" Content="Description:" FontSize="14" FontWeight="Bold"></Label>
             <Label Content="{Binding TourModel.Description}" FontSize="14"></Label>
             <DockPanel>
@@ -86,7 +86,7 @@
                 <Button DockPanel.Dock="Right" Visibility="{Binding Visibility}"  Width="120" HorizontalAlignment="Left" Content="Add Log" Click="OpenTourLog" ></Button>
             </DockPanel>
             
-            <ScrollViewer Height="200">
+            <ScrollViewer Height="Auto">
 
                 <DataGrid SelectedItem="{Binding TourLogModel}" Visibility="{Binding Visibility}" IsReadOnly="True" SelectionUnit="FullRow" Margin="10" MaxHeight="200"  Name="LogGrid" ItemsSource="{Binding TourModel.TourLogList}" AutoGenerateColumns="False" GridLinesVisibility="None" BorderThickness="0">
 
