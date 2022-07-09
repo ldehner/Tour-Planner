@@ -16,7 +16,7 @@ namespace Tour_planner.Business
         public string Type { get; set; } = String.Empty;
         public Address Start { get; set; }
         public Address Destination { get; set; }
-
+        public Dictionary<string, TourLog> LogList { get; set; }
         public Tour()
         {
 
@@ -32,6 +32,7 @@ namespace Tour_planner.Business
             this.Type = Type;
             this.Start = Start;
             this.Destination = Destination;
+            LogList = new();
         }
 
 

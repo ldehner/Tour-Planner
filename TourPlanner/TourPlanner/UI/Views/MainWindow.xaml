@@ -71,18 +71,48 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Grid.Column="2" Grid.Row="2">
+        <StackPanel Grid.Column="2" Grid.Row="2" Visibility="{Binding Visibility}" >
             <DockPanel >
                 <Label DockPanel.Dock="Left" Content="{Binding TourModel.Name, Mode=OneWay}" FontSize="24" FontWeight="Bold" ></Label>
             </DockPanel>
 
-            <Label Content="{Binding TourModel.TravelRoute}" FontSize="14" ></Label>
-            <Label Content="{Binding TourModel.DurationCalculated}" FontSize="14"></Label>
-            <Label Content="{Binding TourModel.DistanceCalucalted}" FontSize="14"></Label>
-            <Label IsEnabled="{Binding isSelected}" Content="Description:" FontSize="14" FontWeight="Bold"></Label>
+            <Label Content="{Binding TourModel.TravelRoute, Mode=OneWay}" FontSize="14" ></Label>
+            <Label Content="{Binding TourModel.DurationCalculated, Mode=OneWay}" FontSize="14"></Label>
+            <Label Content="{Binding TourModel.DistanceCalucalted, Mode=OneWay}" FontSize="14"></Label>
+            <Label Visibility="{Binding Visibility}" Content="Description:" FontSize="14" FontWeight="Bold"></Label>
             <Label Content="{Binding TourModel.Description}" FontSize="14"></Label>
+            <DockPanel>
+                <Button DockPanel.Dock="Left" Visibility="{Binding Visibility}"  Width="120" HorizontalAlignment="Left" Content="Update Tour" Click="OpenChangeWindow" ></Button>
+                <Button DockPanel.Dock="Right" Visibility="{Binding Visibility}"  Width="120" HorizontalAlignment="Left" Content="Add Log" Click="OpenTourLog" ></Button>
+            </DockPanel>
+            
+            <ScrollViewer Height="Auto">
 
-            <Button IsEnabled="{Binding isSelected}" Content="Update Tour" Click="OpenChangeWindow"></Button> 
+                <DataGrid SelectedItem="{Binding TourLogModel}" Visibility="{Binding Visibility}" IsReadOnly="True" SelectionUnit="FullRow" Margin="10" MaxHeight="200"  Name="LogGrid" ItemsSource="{Binding TourModel.TourLogList}" AutoGenerateColumns="False" GridLinesVisibility="None" BorderThickness="0">
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Width="12*" Header="Date" Binding="{Binding Date}"/>
+                        <DataGridTextColumn Width="12*" Header="Time" Binding="{Binding Time}"/>
+                        <DataGridTextColumn Width="12*" Header="Difficulty"  Binding="{Binding DifficultyString}"/>
+                        <DataGridTextColumn Width="12*" Header="Rating"  Binding="{Binding RatingString}"/>
+                        <DataGridTextColumn Width="30*" Header="Comment"  Binding="{Binding Comment}"/>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+            <DockPanel>
+                <Button DockPanel.Dock="Left" Visibility="{Binding LogVisibility}"  Width="120" HorizontalAlignment="Left" Content="Update Log" ></Button>
+                <Button DockPanel.Dock="Right" Visibility="{Binding LogVisibility}"  Width="120" HorizontalAlignment="Left" Content="Delete Log" Click="OpenTourLogDelete" ></Button>
+            </DockPanel>
         </StackPanel>
         
 

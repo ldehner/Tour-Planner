@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Tour_planner.Business;
@@ -17,17 +19,57 @@ namespace Tour_planner.UI.ViewModels
 
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+        private Visibility visibility = Visibility.Collapsed;
+        private Visibility logVisibility = Visibility.Collapsed; 
 
         private IQuery requests;
         private TourModel _tour;
+        private TourLogModel _log;
         private bool _isSelected = false;
+        private bool _isLogSelected = false;
 
 
+
+        public Visibility Visibility
+        {
+            get { return visibility; }
+            set { visibility = value; OnPropertyChanged("Visibility"); }
+        }
+
+        public Visibility LogVisibility
+        {
+            get { return logVisibility; }
+            set { logVisibility = value; OnPropertyChanged("LogVisibility"); }
+        }
         public bool isSelected
         {
             get { return _isSelected; }
-            set { _isSelected = value; OnPropertyChanged("isSelected"); }
+            set { _isSelected = value; OnPropertyChanged("isSelected"); 
+                if (value == true) { 
+                    Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    Visibility = Visibility.Collapsed;
+                } 
+            }
         }
+
+        public bool isLogSelected
+        {
+            get { return _isLogSelected; }
+            set { _isLogSelected = value; OnPropertyChanged("isLogSelected");
+                if (value == true)
+                {
+                    LogVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    LogVisibility = Visibility.Collapsed;
+                }
+            }
+        }
+
         public TourModel? TourModel
         {
             get { return _tour; }
@@ -40,13 +82,27 @@ namespace Tour_planner.UI.ViewModels
                 }
             }
         }
+        public TourLogModel? TourLogModel 
+        { 
+            get { return _log; } 
+            set { 
+                if(value != null)
+                {
+                    _log = value;
+                    isLogSelected = true;
+                    OnPropertyChanged("TourLogModel");
+                }
+            
+            } 
+        }
+
 
         private TourListModel _tourList;
 
         public ObservableCollection<TourModel> TourList
         {
             get { return _tourList.Tourlist; }
-            set { _tourList.Tourlist = value; }
+            set { _tourList.Tourlist = value;}
         }
 
 
@@ -59,6 +115,7 @@ namespace Tour_planner.UI.ViewModels
 
         public async void LoadTours()
         {
+            //await requests.GetReport();
             Tourlist tourList = await requests.GetTours();
 
             if(tourList != null)
@@ -71,6 +128,11 @@ namespace Tour_planner.UI.ViewModels
 
                 foreach(Tour t in data)
                 {
+                    byte[] img = await requests.GetImageBytes(t.Id);
+
+                    
+                    //File.WriteAllBytes(t.Name + ".jpg", img);
+
                     _tourList.AddTourToList(t, image);
                 }
             }
@@ -115,11 +177,31 @@ namespace Tour_planner.UI.ViewModels
             {
                 requests.DeleteTour(TourModel.Id);
                 LoadTours();
+                TourModel = null;
+                isSelected = false;
+            }
+        }
+        private ICommand _deleteLogCommand;
+
+        public ICommand DeleteLogCommand
+        {
+            get
+            {
+                if(_deleteLogCommand != null)
+                {
+                    return _deleteLogCommand;
+                }
+                return new Command(() => DeleteLog(), true);
             }
         }
 
-
-
+        public void DeleteLog()
+        {
+            if(TourLogModel != null && TourModel != null)
+            {
+                requests.DeleteLog(TourModel.Id, TourLogModel.Logid); ;
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         

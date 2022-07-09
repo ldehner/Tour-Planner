@@ -38,22 +38,25 @@ namespace Tour_planner.UI.Views
         private void OpenChangeWindow(object sender, RoutedEventArgs e)
         {
             ChangeTour changeTour = new ChangeTour();
-            ChangeTourViewModel changeTourViewModel = new ChangeTourViewModel(viewModel.TourModel);
+            ChangeTourViewModel changeTourViewModel = new ChangeTourViewModel(viewModel.TourModel, ref viewModel);
             changeTour.DataContext = changeTourViewModel;
 
             changeTour.Owner = this;
             changeTour.Show();
+           
 
         }
 
         private void OpenTourCreate(object sender, RoutedEventArgs e)
         {
             CreateTour createTour = new CreateTour();
-            CreateTourViewModel createTourViewModel = new CreateTourViewModel();
+            CreateTourViewModel createTourViewModel = new CreateTourViewModel(ref viewModel);
             createTour.DataContext = createTourViewModel;
 
             createTour.Owner = this;
             createTour.Show();
+            
+
         }
 
         private void OpenTourDelete(object sender, RoutedEventArgs e)
@@ -63,6 +66,23 @@ namespace Tour_planner.UI.Views
 
             deleteTour.Owner = this;
             deleteTour.Show();
+        }
+
+        private void OpenTourLog(object sender, RoutedEventArgs e)
+        {
+            CreateTourLog createLog = new CreateTourLog();
+            CreateTourLogViewModel createTourLogViewModel = new CreateTourLogViewModel(viewModel.TourModel.Id);
+            createLog.DataContext = createTourLogViewModel;
+
+            createLog.Owner = this;
+            createLog.Show();
+        }
+        private void OpenTourLogDelete(object sender, RoutedEventArgs e)
+        {
+            DeleteTourLog deleteTourLog = new DeleteTourLog();
+            deleteTourLog.DataContext = this.DataContext;
+            deleteTourLog.Owner = this;
+            deleteTourLog.Show();
         }
     }
 }

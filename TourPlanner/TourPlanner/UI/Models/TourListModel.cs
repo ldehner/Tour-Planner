@@ -39,7 +39,7 @@ namespace Tour_planner.UI.Models
         public ObservableCollection<TourModel> Tourlist
         {
             get { return Tlist; }
-            set { Tlist = value; }
+            set { Tlist = value;  }
         }
 
         public Dictionary<string, BitmapImage> ImageList
