@@ -25,8 +25,8 @@ namespace Tour_planner.UI.Models
         public int Difficulty { get { return _difficulty; } set { _difficulty = value; OnPropertyChanged("Difficulty"); } }
         public string Time { get { return _time; } set { _time = value; OnPropertyChanged("Time"); } }
         public int Rating { get { return _rating; } set { _rating = value; OnPropertyChanged("Rating"); } }
-        public string DifficultyString { get { return "" + Difficulty;} }
-        public string RatingString { get { return "" + Rating;  } }
+        public string DifficultyString { get { SetDifficultyStringByInt(); return DifficultyInput; } }
+        public string RatingString { get { SetRatingStringByInt(); return RatingInput;  } }
         public string DifficultyInput { get; set; }
         public string RatingInput { get; set; }
         public DateTime DateTime { get { return _dateTimePicker; } set { _dateTimePicker = value; OnPropertyChanged("DateTime"); } }
@@ -65,7 +65,7 @@ namespace Tour_planner.UI.Models
             { "Not Rated", 0 },
             { "Very Bad", 1 },
             { "Bad", 2},
-            { "Medium", 3},
+            { "Moderate", 3},
             { "Good", 4},
             { "Very Good", 5}
 
@@ -75,7 +75,7 @@ namespace Tour_planner.UI.Models
             { "Not Rated", 0 },
             { "Very Easy", 1 },
             { "Easy", 2},
-            { "Medium", 3},
+            { "Moderate", 3},
             { "Hard", 4},
             { "Very Hard", 5}
         };

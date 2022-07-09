@@ -97,7 +97,7 @@ namespace Tour_planner.UI.ViewModels
         }
 
 
-        private TourListModel _tourList;
+        public TourListModel _tourList;
 
         public ObservableCollection<TourModel> TourList
         {
@@ -115,7 +115,7 @@ namespace Tour_planner.UI.ViewModels
 
         public async void LoadTours()
         {
-            //await requests.GetReport();
+            
             Tourlist tourList = await requests.GetTours();
 
             if(tourList != null)
@@ -128,14 +128,19 @@ namespace Tour_planner.UI.ViewModels
 
                 foreach(Tour t in data)
                 {
-                    byte[] img = await requests.GetImageBytes(t.Id);
+                    string img = await requests.GetImageBytes(t.Id);
+
+                    string result = img.Substring(1, img.Length - 2);
+
+                    byte[] binaryImg = Convert.FromBase64String(result);
 
                     
-                    //File.WriteAllBytes(t.Name + ".jpg", img);
+                    File.WriteAllBytes(t.Id + ".jpg", binaryImg);
 
                     _tourList.AddTourToList(t, image);
                 }
             }
+            CreateReport();
         }
 
         public async void LoadSearchedTours(string searchTerm)
@@ -205,6 +210,20 @@ namespace Tour_planner.UI.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
         
+
+        public async void CreateReport()
+        {
+            string report = await requests.GetReport();
+
+            string result = report.Substring(1, report.Length - 2);
+
+            byte[] pdf = Convert.FromBase64String(result);
+
+
+            File.WriteAllBytes("AllTourReport.pdf",pdf);
+
+        }
+
         private void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)

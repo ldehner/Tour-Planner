@@ -84,5 +84,15 @@ namespace Tour_planner.UI.Views
             deleteTourLog.Owner = this;
             deleteTourLog.Show();
         }
+
+        private void OpenChangeLogWindow(object sender, RoutedEventArgs e)
+        {
+            ChangeTourLog changeTourLog = new ChangeTourLog();
+            ChangeTourLogViewModel changeTourLogViewModel = new ChangeTourLogViewModel(viewModel.TourLogModel, viewModel.TourModel.Id);
+            changeTourLog.DataContext = changeTourLogViewModel;
+
+            changeTourLog.Owner = this;
+            changeTourLog.Show();
+        }
     }
 }
