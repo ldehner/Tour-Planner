@@ -43,14 +43,9 @@ namespace Tour_planner.Data_Access
             string content = $"{{ \"name\" : \"{tour.Name}\" , \"description\" : \"{tour.Description}\" , \"type\" : \"{tour.Type}\" , \"start\" : {{ \"street\" : \"{tour.Start.Street}\", \"houseNumber\" : \"{tour.Start.HouseNumber}\", \"plz\" : \"{tour.Start.PostalCode}\" , \"city\" : \"{tour.Start.City}\", \"country\" : \"{tour.Start.Country}\" }}, \"destination\" : {{ \"street\" : \"{tour.Destination.Street}\", \"houseNumber\" : \"{tour.Destination.HouseNumber}\", \"plz\" : \"{tour.Destination.PostalCode}\" , \"city\" : \"{tour.Destination.City}\", \"country\" : \"{tour.Destination.Country}\" }} }}";
             var data = new StringContent(content, Encoding.UTF8, "application/json");
 
-            
-            string test = await data.ReadAsStringAsync();
-
             var response = await client.PostAsync(Url + "/AddTour", data);
 
             var result = response.Content.ReadAsStreamAsync();
-
-            Console.WriteLine(result);
         }
 
         public void DeleteTour(string Id)
@@ -112,38 +107,39 @@ namespace Tour_planner.Data_Access
             var result = response.Result;
         }
 
-        public async Task UpdateLog(TourLog log, string Logid)
+        public async Task UpdateLog(TourLog log, string TourId)
         {
             using var client = new HttpClient();
 
             string content = $"{{ \"date\" : \"{log.Date}\" , \"duration\" : \"{log.Time}\" , \"comment\" : \"{log.Comment}\" , \"difficulty\" : {log.Difficulty}, \"rating\" : {log.Rating} }}";
             var data = new StringContent(content, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync(Url, data);
+            var response = await client.PutAsync(Url+"/UpdateLog/"+TourId+"/"+log.LogId, data);
 
             var result = await response.Content.ReadAsStringAsync();
             Console.WriteLine(result);
         }
 
-        public async Task GetReport()
+        public async Task<string> GetReport()
         {
             using var client = new HttpClient();
 
             var response = await client.GetAsync(Url + "/TourOverviewReport");
 
-            var result = response.Content.ReadAsByteArrayAsync();
+            var result = response.Content.ReadAsStringAsync();
 
+
+            return await result;
             
-            File.WriteAllBytes("hello.pdf", await result);
         }
 
 
-        public async Task<byte[]> GetImageBytes(string tourId)
+        public async Task<string> GetImageBytes(string tourId)
         {
             using var client = new HttpClient();
 
             var response = await client.GetAsync(Url + "/GetMap/" + tourId);
 
-            return await response.Content.ReadAsByteArrayAsync();
+            return await response.Content.ReadAsStringAsync();
         }
 
         private Tourlist fillTourlist(JArray data)

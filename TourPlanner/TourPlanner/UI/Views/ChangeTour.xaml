@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Window1" Height="440" Width="450">
+        Title="Window1" Height="470" Width="450">
     <Grid>
         <StackPanel Margin="10">
             <Label FontSize="20">Update Tour</Label>
