@@ -1,5 +1,4 @@
-﻿using Tour_planner.Business;
-using TourPlanner.Business;
+﻿
 
 namespace UnitTesting
 {
@@ -11,6 +10,7 @@ namespace UnitTesting
         public FrontEndTests()
         {
             _tourList = new Tourlist();
+            Tour t = new Tour();
         } 
 
         [SetUp]
