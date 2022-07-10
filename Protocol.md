@@ -29,4 +29,6 @@ Around 70-80 Hours per person
 
 [Class Diagram API](https://github.com/ldehner/Tour-Planner/blob/main/TourPlanner/ClassDiagrammRest.png)
 
+[Class Diagram Client](https://github.com/ldehner/Tour-Planner/blob/main/TourPlanner/ClassDiagrammClient.png)
+
 [Use Case Diagram](https://github.com/ldehner/Tour-Planner/blob/main/TourPlanner/UseCase.png)
