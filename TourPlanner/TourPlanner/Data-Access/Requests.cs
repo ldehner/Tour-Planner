@@ -152,6 +152,18 @@ namespace Tour_planner.Data_Access
             
         }
 
+        public async Task<string> GetReportById(string id)
+        {
+            using var client = new HttpClient();
+
+            var response = await client.GetAsync(Url + "/TourReport/" + id);
+
+            var result = response.Content.ReadAsStringAsync();
+
+
+            return await result;
+        }
+
 
         public async Task<string> GetImageBytes(string tourId)
         {
@@ -161,6 +173,17 @@ namespace Tour_planner.Data_Access
 
             return await response.Content.ReadAsStringAsync();
         }
+
+        public async Task<string> GetWeatherFromLocation(string start, string destination)
+        {
+            using var client = new HttpClient();
+
+            var response = await client.GetAsync("https://localhost:7180/api/Weather/GetWeather/" + start + "/" + destination);
+            string result = await response.Content.ReadAsStringAsync();
+            return result;
+
+        }
+
 
         private Tourlist fillTourlist(JArray data)
         {

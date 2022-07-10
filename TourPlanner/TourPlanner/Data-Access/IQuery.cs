@@ -19,6 +19,8 @@ namespace Tour_planner.Data_Access
         public void DeleteLog(string TourId,string LogId);
         public Task UpdateLog(TourLog log, string Logid);
         public Task<string> GetReport();
+        public Task<string> GetReportById(string Id);
         public Task<string> GetImageBytes(string tourId);
+        public Task<string> GetWeatherFromLocation(string start, string destination);
     }
 }

@@ -17,6 +17,8 @@ namespace Tour_planner.Business
         public Address Start { get; set; }
         public Address Destination { get; set; }
         public Dictionary<string, TourLog> LogList { get; set; }
+        
+
         public Tour()
         {
 

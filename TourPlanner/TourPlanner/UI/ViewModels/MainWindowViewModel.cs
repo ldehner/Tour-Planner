@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -204,10 +205,12 @@ namespace Tour_planner.UI.ViewModels
 
                     File.WriteAllBytes(location, binaryImg);
 
+                    string jsonWeather = await requests.GetWeatherFromLocation(t.Start.City + ", " + t.Start.Country, t.Destination.City + ", " + t.Destination.Country);
 
+                    JObject weather = JObject.Parse(jsonWeather);
 
-
-
+                    t.Start.Weather = (string)weather["fromTemp"] + "°C - " + (string)weather["fromCondition"];
+                    t.Destination.Weather = (string)weather["toTemp"] + "°C - " + (string)weather["toCondition"];
 
                     _tourList.AddTourToList(t, image);
                 }
@@ -306,8 +309,20 @@ namespace Tour_planner.UI.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        private ICommand _createTotalReportCommand;
 
-        public async void CreateReport()
+        public ICommand CreateTotalReportCommand
+        {
+            get { if(_createTotalReportCommand != null)
+                {
+                    return _createTotalReportCommand;
+                }
+                _createTotalReportCommand = new Command(() => CreateTotalReport(), true);
+                return _createTotalReportCommand;
+            }
+        }
+
+        public async void CreateTotalReport()
         {
             string report = await requests.GetReport();
 
@@ -316,7 +331,35 @@ namespace Tour_planner.UI.ViewModels
             byte[] pdf = Convert.FromBase64String(result);
 
 
-            File.WriteAllBytes("AllTourReport.pdf", pdf);
+            File.WriteAllBytes("../../../reports/AllTourReport.pdf", pdf);
+
+        }
+
+        private ICommand _createReportCommand;
+
+        public ICommand CreateReportCommand
+        {
+            get
+            {
+                if (_createReportCommand != null)
+                {
+                    return _createReportCommand;
+                }
+                _createReportCommand = new Command(() => CreateReport(TourModel.Id), true);
+                return _createReportCommand;
+            }
+        }
+
+        public async void CreateReport(string Id)
+        {
+            string report = await requests.GetReportById(Id);
+
+            string result = report.Substring(1, report.Length - 2);
+
+            byte[] pdf = Convert.FromBase64String(result);
+
+
+            File.WriteAllBytes("../../../reports/" + Id + ".pdf", pdf);
 
         }
 

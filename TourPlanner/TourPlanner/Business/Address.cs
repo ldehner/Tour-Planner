@@ -13,7 +13,7 @@ namespace Tour_planner.Business
         public string City { get; set; } = String.Empty;
         public string PostalCode { get; set; } = String.Empty;
         public string Country { get; set; } = String.Empty;
-        
+        public string Weather { get; set; } = String.Empty;
         public string FullAddress { get { return $"{Street} {HouseNumber} {PostalCode} {City} {Country} "; } }
         public Address()
         {
@@ -29,6 +29,5 @@ namespace Tour_planner.Business
             PostalCode = postalCode;
             Country = country;
         }
-
     }
 }

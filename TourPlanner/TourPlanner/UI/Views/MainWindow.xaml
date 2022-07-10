@@ -27,7 +27,7 @@
 
         <ToolBarTray Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
             <ToolBar Style="{StaticResource MaterialDesignToolBar}" ClipToBounds="False">
-                <Menu>
+                <!--<Menu>
                     <MenuItem Header="_File">
                         <MenuItem Header="New" />
                         <MenuItem Header="Open" />
@@ -35,21 +35,10 @@
                         <MenuItem Header="Save As..." />
                     </MenuItem>
                 </Menu>
-                <Separator/>
-                <Menu>
-                    <MenuItem Header="Edit" />
-                </Menu>
-                <Separator/>
-                <Menu>
-                    <MenuItem Header="Options" Width="150">
+                <Separator/>-->
 
-                    </MenuItem>
-                </Menu>
-                <Separator/>
-                <Menu>
-                    <MenuItem Header="Help" Width="104" />
-                </Menu>
-                <Separator/>
+                <Button Content="Create TotalReport" Width="150" Command="{Binding CreateTotalReportCommand}"></Button>
+
                 <TextBox x:Name="SearchTextBox" Text="{Binding SearchText}" materialDesign:HintAssist.Hint="Search" Width="200" HorizontalAlignment="Right" />
                 <Button Content="{materialDesign:PackIcon Kind=Search}" Command="{Binding SearchTours}"  Style="{StaticResource MaterialDesignPaperLightButton}"  />
 
@@ -79,13 +68,21 @@
                 <StackPanel DockPanel.Dock="Left" >
                     <Label Content="{Binding TourModel.Name, Mode=OneWay}" FontSize="24" FontWeight="Bold" ></Label>
                     <Label Content="{Binding TourModel.TravelRoute, Mode=OneWay}" FontSize="14" ></Label>
+                    <Label Content=" " FontSize="14"></Label>
                     <Label Content="{Binding TourModel.DurationCalculated, Mode=OneWay}" FontSize="14"></Label>
                     <Label Content="{Binding TourModel.DistanceCalucalted, Mode=OneWay}" FontSize="14"></Label>
+                    <Label Content=" " FontSize="14"></Label>
+                    <Label Content="{Binding TourModel.StartWeather, Mode=OneWay}" FontSize="14"></Label>
+                    <Label Content="{Binding TourModel.DestinationWeather, Mode=OneWay}" FontSize="14"></Label>
+                    <Label Content=" " FontSize="14"></Label>
+                    <Label Content="{Binding TourModel.ChildFriendliness, Mode=OneWay}" FontSize="14"></Label>
+                    <Label Content="{Binding TourModel.Popularity, Mode=OneWay}" FontSize="14"></Label>
                     <Label Visibility="{Binding Visibility}" Content="Description:" FontSize="14" FontWeight="Bold"></Label>
                     <Label Content="{Binding TourModel.Description}" FontSize="14"></Label>
                     <DockPanel>
                         <Button DockPanel.Dock="Left" Margin="0 0 5 0" Visibility="{Binding Visibility}"  Width="120" HorizontalAlignment="Left" Content="Update Tour" Click="OpenChangeWindow" ></Button>
                         <Button DockPanel.Dock="Right" Visibility="{Binding Visibility}"  Width="120" HorizontalAlignment="Left" Content="Add Log" Click="OpenTourLog" ></Button>
+                        <Button DockPanel.Dock="Right" Margin="0 0 5 0" Visibility="{Binding Visibility}" Width="120" HorizontalAlignment="Right" Content="Create Report"  Command="{Binding CreateReportCommand}"></Button>
                     </DockPanel>
                 </StackPanel>
                 <Image DockPanel.Dock="Right" Height="300" Width="300" Source="{Binding TourModel.Image}" RenderOptions.BitmapScalingMode="HighQuality"></Image>    

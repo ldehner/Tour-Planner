@@ -100,7 +100,10 @@ namespace Tour_planner.UI.Models
         public string TravelRoute { get { return Start.FullAddress + " - " + Destination.FullAddress; } }
         public string DistanceCalucalted { get { return "Estimated distance: " + Math.Round(Distance, 2) + " km"; } }
         public string DurationCalculated { get { return "Estimated duration: " + Duration.ToString(); } }
-
+        public string StartWeather { get { return Start.City+", " + Start.Country +": " + Start.Weather; } }
+        public string DestinationWeather { get { return Destination.City + ", " + Destination.Country + ": " + Destination.Weather; } }
+        public string ChildFriendliness { get { return "Childfriendliness: "+ CalculateChildFriendliness(); } }
+        public string Popularity { get { return "Popularity: "+ CalculatePopularity(); } }
 
         private ObservableCollection<TourLogModel> _tourLogList;
 
@@ -122,6 +125,44 @@ namespace Tour_planner.UI.Models
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        public string CalculateChildFriendliness()
+        {
+            if(TourLogList.Count == 0)
+            {
+                return "Not yet known";
+            }
+            int difficulty = 0;
 
+            foreach (var item in TourLogList)
+            {
+                difficulty += item.Difficulty;
+            }
+
+            if(difficulty / TourLogList.Count > 2)
+            {
+                return "Not ChildFriendly";
+            }
+            else
+            {
+                return "Is ChildFriendly";
+            }
+        }
+
+        public string CalculatePopularity()
+        {
+            int length = LogList.Count;
+            if (length <= 0) {
+                return "Not yet done";
+            } else if (length > 0 && length < 5) {
+                return "Done a few times";
+            }else if(length > 10 && length < 15)
+            {
+                return "Absolut Banger";
+            }
+            else
+            {
+                return "Hotspot route";
+            }
+        }
     }
 }
