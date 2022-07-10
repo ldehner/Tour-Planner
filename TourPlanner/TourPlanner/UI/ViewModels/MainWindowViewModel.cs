@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using Tour_planner.Business;
-using Tour_planner.Data_Access;
-using Tour_planner.UI.Commands;
-using Tour_planner.UI.Models;
+using TourPlanner.Business;
+using TourPlanner.Data_Access;
+using TourPlanner.UI.Commands;
+using TourPlanner.UI.Models;
 
-namespace Tour_planner.UI.ViewModels
+namespace TourPlanner.UI.ViewModels
 {
 
     public class MainWindowViewModel : INotifyPropertyChanged

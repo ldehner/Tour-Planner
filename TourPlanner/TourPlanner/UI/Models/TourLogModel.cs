@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Tour_planner.Business;
+using TourPlanner.Business;
 
-namespace Tour_planner.UI.Models
+namespace TourPlanner.UI.Models
 {
     public class TourLogModel
     {

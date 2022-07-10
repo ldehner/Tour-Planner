@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Tour_planner.UI.Views
+namespace TourPlanner.UI.Views
 {
     /// <summary>
     /// Interaktionslogik für DeleteTour.xaml

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Tour_planner.UI.Commands
+namespace TourPlanner.UI.Commands
 {
     public class Command : ICommand
     {

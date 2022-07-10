@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tour_planner.Business;
+using TourPlanner.Business;
 
-namespace Tour_planner.Data_Access
+namespace TourPlanner.Data_Access
 {
     public interface IQuery
     {

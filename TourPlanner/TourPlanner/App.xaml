@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-    <Application x:Class="Tour_planner.App"
+    <Application x:Class="TourPlanner.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Tour_planner"
+             xmlns:local="clr-namespace:TourPlanner"
              StartupUri="UI/Views/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>

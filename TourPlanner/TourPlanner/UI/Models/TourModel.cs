@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using Tour_planner.Business;
+using TourPlanner.Business;
 
-namespace Tour_planner.UI.Models
+namespace TourPlanner.UI.Models
 {
     public class TourModel : INotifyPropertyChanged
     {

@@ -7,10 +7,10 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Tour_planner.Business;
-using Tour_planner.UI.ViewModels;
+using TourPlanner.Business;
+using TourPlanner.UI.ViewModels;
 
-namespace Tour_planner.Data_Access
+namespace TourPlanner.Data_Access
 {
     public class Requests : IQuery
     {
