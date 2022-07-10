@@ -2,8 +2,10 @@ Linus Dehner, Dario Bruckner
 ## App architecture (layers and layer contents/functionality)
  Getting of data from the backend was done in a Data-Access layer and further transformed into Class Models in the Buiness layer to than finally be localist in the UI in further Model Classes. These Models than have properties bound to the specific values to be shown on the UI. 
 
-
 ## Use cases
+
+
+
 ## UX, library decisions (where applicable), lessons learned
 We choose to use MaterialDesign for our frontend design framework since it offers material design options to the standart wpf tools. This makes it not only better to look at but it also helps with customization and thus helped a lot during the development process.
 
@@ -20,3 +22,11 @@ Our Unique feature is a service, which provides the current temperature and a ve
 Around 70-80 Hours per person
 ## Link to GIT
 [https://github.com/ldehner/Tour-Planner](https://github.com/ldehner/Tour-Planner)
+
+## Other Links
+
+[Sequence Diagram](https://github.com/ldehner/Tour-Planner/blob/main/TourPlanner/SequenceDiagram.png)
+
+[Class Diagram API](https://github.com/ldehner/Tour-Planner/blob/main/TourPlanner/ClassDiagrammRest.png)
+
+[Use Case Diagram](https://github.com/ldehner/Tour-Planner/blob/main/TourPlanner/UseCase.png)
