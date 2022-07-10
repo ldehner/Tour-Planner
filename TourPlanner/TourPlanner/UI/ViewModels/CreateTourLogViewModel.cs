@@ -76,8 +76,8 @@ namespace Tour_planner.UI.ViewModels
                     tourLog.Difficulty = NewTourLogModel.Difficulty;
                     tourLog.Rating = NewTourLogModel.Rating;
                     tourLog.Comment = NewTourLogModel.Comment;
-                    tourLog.Time = NewTourLogModel.TimeTime.ToString("dd:HH:mm");
-                    tourLog.Date = NewTourLogModel.DateTime.ToString("yyyy-MM-dd");
+                    tourLog.Time = NewTourLogModel.TimeDay + ":" + NewTourLogModel.Hours + ":" + NewTourLogModel.Minutes; //CurrentLogModel.TimeTime.ToString("dd:HH:mm");
+                    tourLog.Date = NewTourLogModel.Year + "-" + NewTourLogModel.Month + "-" + NewTourLogModel.Day; //CurrentLogModel.DateTime.ToString("yyyy-MM-dd");
 
                     requets.PostLog(tourLog, TourId);
 

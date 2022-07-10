@@ -16,6 +16,13 @@ namespace Tour_planner.UI.Models
         private int _rating;
         private DateTime _dateTimePicker;
         private DateTime _timePicker;
+        private string year;
+        private string month;
+        private string day;
+        private string daytime;
+        private string hour;
+        private string minute;
+
 
 
         public string Logid { get { return _logid; } set { _logid = value; }}
@@ -31,7 +38,12 @@ namespace Tour_planner.UI.Models
         public string RatingInput { get; set; }
         public DateTime DateTime { get { return _dateTimePicker; } set { _dateTimePicker = value; OnPropertyChanged("DateTime"); } }
         public DateTime TimeTime { get { return _timePicker; } set { _timePicker = value; OnPropertyChanged("TimeTime"); } }
-
+        public string Year { get { return year; } set { year = value; OnPropertyChanged("Year"); } }
+        public string Month { get { return month; } set { month = value; OnPropertyChanged("Month"); } }
+        public string Day { get { return day; } set { day = value; OnPropertyChanged("Day"); } }
+        public string TimeDay { get { return daytime; } set { daytime = value; OnPropertyChanged("TimeDay"); } }
+        public string Hours { get { return hour; } set { hour = value; OnPropertyChanged("Hours"); } }
+        public string Minutes { get { return minute; } set { minute = value; OnPropertyChanged("Minutes"); } }
 
         public TourLogModel()
         {

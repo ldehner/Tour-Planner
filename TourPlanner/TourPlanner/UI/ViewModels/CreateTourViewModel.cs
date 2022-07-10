@@ -18,13 +18,13 @@ namespace Tour_planner.UI.ViewModels
 
         private IQuery requets;
         private TourModel _newtourModel;
-        private MainWindowViewModel reloadModel;
+       
 
         public CreateTourViewModel(ref MainWindowViewModel reloadModel)
         {
             requets = new Requests(reloadModel);
             _newtourModel = new TourModel();
-            this.reloadModel = reloadModel;
+      
         }
 
 
@@ -71,8 +71,7 @@ namespace Tour_planner.UI.ViewModels
                     tour.Description = _newtourModel.Description;
 
                     requets.PostTour(tour);
-                   
-                    reloadModel.LoadTours();
+                  
                 }
             }
             catch

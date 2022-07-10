@@ -155,7 +155,8 @@ namespace Tour_planner.UI.ViewModels
 
         public async void LoadTours()
         {
-
+            isSelected = false;
+            isLogSelected = false;
             Tourlist tourList = await requests.GetTours();
 
             if (tourList != null)
@@ -298,7 +299,8 @@ namespace Tour_planner.UI.ViewModels
         {
             if (TourLogModel != null && TourModel != null)
             {
-                requests.DeleteLog(TourModel.Id, TourLogModel.Logid); ;
+                requests.DeleteLog(TourModel.Id, TourLogModel.Logid);
+                LoadTours();
             }
         }
 

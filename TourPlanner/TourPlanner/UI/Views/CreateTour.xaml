@@ -31,11 +31,11 @@
                 </Grid.ColumnDefinitions>
 
 
-                <TextBox Grid.Column="0" Text="{Binding newTourModel.StartCountry, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreateCountryTextBox" materialDesign:HintAssist.Hint="Country" materialDesign:HintAssist.HelperText="This Field is required"/>
-                <TextBox Grid.Column="1" Text="{Binding newTourModel.StartCity, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreateCityTextBox" materialDesign:HintAssist.Hint="City" materialDesign:HintAssist.HelperText="This Field is required"/>
+                <TextBox Grid.Column="4" Text="{Binding newTourModel.StartCountry, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreateCountryTextBox" materialDesign:HintAssist.Hint="Country" materialDesign:HintAssist.HelperText="This Field is required"/>
+                <TextBox Grid.Column="3" Text="{Binding newTourModel.StartCity, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreateCityTextBox" materialDesign:HintAssist.Hint="City" materialDesign:HintAssist.HelperText="This Field is required"/>
                 <TextBox Grid.Column="2" Text="{Binding newTourModel.StartPostalCode, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreatePostelCodeTextBox" materialDesign:HintAssist.Hint="Plz" materialDesign:HintAssist.HelperText="This Field is required"/>
-                <TextBox Grid.Column="3" Text="{Binding newTourModel.StartStreet, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreateStreetTextBox" materialDesign:HintAssist.Hint="Street" materialDesign:HintAssist.HelperText="This Field is required"/>
-                <TextBox Grid.Column="4" Text="{Binding newTourModel.StartHouseNumber, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreateHouseNumberTextBox" materialDesign:HintAssist.Hint="Nr" materialDesign:HintAssist.HelperText="This Field is required"/>
+                <TextBox Grid.Column="0" Text="{Binding newTourModel.StartStreet, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreateStreetTextBox" materialDesign:HintAssist.Hint="Street" materialDesign:HintAssist.HelperText="This Field is required"/>
+                <TextBox Grid.Column="1" Text="{Binding newTourModel.StartHouseNumber, UpdateSourceTrigger=PropertyChanged}" x:Name="StartCreateHouseNumberTextBox" materialDesign:HintAssist.Hint="Nr" materialDesign:HintAssist.HelperText="This Field is required"/>
             </Grid>
 
 

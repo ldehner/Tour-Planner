@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Tour_planner.Business;
@@ -82,8 +83,8 @@ namespace Tour_planner.UI.ViewModels
                     log.Difficulty = CurrentLogModel.Difficulty;
                     log.Rating = CurrentLogModel.Rating;
                     log.Comment = CurrentLogModel.Comment;
-                    log.Time = CurrentLogModel.TimeTime.ToString("dd:HH:mm");
-                    log.Date = CurrentLogModel.DateTime.ToString("yyyy-MM-dd");
+                    log.Time = CurrentLogModel.TimeDay + ":" + CurrentLogModel.Hours + ":" + CurrentLogModel.Minutes; //CurrentLogModel.TimeTime.ToString("dd:HH:mm");
+                    log.Date = CurrentLogModel.Year + "-" + CurrentLogModel.Month + "-" + CurrentLogModel.Day; //CurrentLogModel.DateTime.ToString("yyyy-MM-dd");
                     requets.UpdateLog(log, Id);
                 }
             }
@@ -93,6 +94,7 @@ namespace Tour_planner.UI.ViewModels
             }
         }
 
+        
         private bool checkForInputs()
         {
 
