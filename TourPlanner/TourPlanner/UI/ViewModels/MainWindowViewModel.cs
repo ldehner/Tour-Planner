@@ -159,7 +159,7 @@ namespace Tour_planner.UI.ViewModels
             isSelected = false;
             isLogSelected = false;
             Tourlist tourList = await requests.GetTours();
-
+            _tourList.Tourlist.Clear();
             if (tourList != null)
             {
 
@@ -176,7 +176,7 @@ namespace Tour_planner.UI.ViewModels
                 }
 
 
-                _tourList.Tourlist.Clear();
+                
 
                 Dictionary<string, Tour>.ValueCollection data = tourList.TourList.Values;
 

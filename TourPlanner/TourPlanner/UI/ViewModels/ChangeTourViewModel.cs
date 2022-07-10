@@ -81,8 +81,6 @@ namespace Tour_planner.UI.ViewModels
                     tour.Description = currenttourModel.Description;
 
                     requets.UpdateTour(tour, Id);
-                    System.Threading.Thread.Sleep(4500); //Mapquest is so damn slow
-                    reloadModel.LoadTours();
                 }
             }
             catch

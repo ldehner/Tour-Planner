@@ -114,6 +114,7 @@ namespace Tour_planner.Data_Access
             var result = response.Content.ReadAsStreamAsync();
 
             Console.WriteLine(result);
+            
             vm.LoadTours();
         }
 
@@ -136,6 +137,7 @@ namespace Tour_planner.Data_Access
 
             var result = await response.Content.ReadAsStringAsync();
             Console.WriteLine(result);
+            
             vm.LoadTours();
         }
 
