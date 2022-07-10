@@ -71,7 +71,7 @@ namespace Tour_planner.UI.Views
         private void OpenTourLog(object sender, RoutedEventArgs e)
         {
             CreateTourLog createLog = new CreateTourLog();
-            CreateTourLogViewModel createTourLogViewModel = new CreateTourLogViewModel(viewModel.TourModel.Id);
+            CreateTourLogViewModel createTourLogViewModel = new CreateTourLogViewModel(viewModel.TourModel.Id, ref viewModel);
             createLog.DataContext = createTourLogViewModel;
 
             createLog.Owner = this;
@@ -88,7 +88,7 @@ namespace Tour_planner.UI.Views
         private void OpenChangeLogWindow(object sender, RoutedEventArgs e)
         {
             ChangeTourLog changeTourLog = new ChangeTourLog();
-            ChangeTourLogViewModel changeTourLogViewModel = new ChangeTourLogViewModel(viewModel.TourLogModel, viewModel.TourModel.Id);
+            ChangeTourLogViewModel changeTourLogViewModel = new ChangeTourLogViewModel(viewModel.TourLogModel, viewModel.TourModel.Id, ref viewModel);
             changeTourLog.DataContext = changeTourLogViewModel;
 
             changeTourLog.Owner = this;

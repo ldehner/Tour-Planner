@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Tour_planner.Business;
+using Tour_planner.UI.ViewModels;
 
 namespace Tour_planner.Data_Access
 {
@@ -15,6 +16,18 @@ namespace Tour_planner.Data_Access
     {
 
         private const string Url = "https://localhost:7180/api/TourPlanner";
+
+        private MainWindowViewModel vm;
+
+        public Requests()
+        {
+
+        }
+        public Requests(MainWindowViewModel vm)
+        {
+            this.vm = vm;
+        }
+
         public async Task<Tourlist> GetTours()
         {
             using var client = new HttpClient();
@@ -46,6 +59,7 @@ namespace Tour_planner.Data_Access
             var response = await client.PostAsync(Url + "/AddTour", data);
 
             var result = response.Content.ReadAsStreamAsync();
+            vm.LoadTours();
         }
 
         public void DeleteTour(string Id)
@@ -56,7 +70,7 @@ namespace Tour_planner.Data_Access
 
             var result = response.Result;
             
-
+           
         }
 
         public async Task UpdateTour(Tour newtour, string oldId)
@@ -69,7 +83,7 @@ namespace Tour_planner.Data_Access
 
             var result = await response.Content.ReadAsStringAsync();
             Console.WriteLine(result);
-
+            vm.LoadTours();
         }
 
         public async Task<Tourlist> GetToursBySearchTerm(string searchTerm)
@@ -100,7 +114,7 @@ namespace Tour_planner.Data_Access
             var result = response.Content.ReadAsStreamAsync();
 
             Console.WriteLine(result);
-
+            vm.LoadTours();
         }
 
         public void DeleteLog(string TourId, string LogId)
@@ -122,6 +136,7 @@ namespace Tour_planner.Data_Access
 
             var result = await response.Content.ReadAsStringAsync();
             Console.WriteLine(result);
+            vm.LoadTours();
         }
 
         public async Task<string> GetReport()

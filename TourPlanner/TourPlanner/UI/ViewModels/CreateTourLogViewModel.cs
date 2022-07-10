@@ -23,9 +23,9 @@ namespace Tour_planner.UI.ViewModels
             set { _newTourLogModel = value; }
         }
 
-        public CreateTourLogViewModel(string tourId)
+        public CreateTourLogViewModel(string tourId, ref MainWindowViewModel refresh)
         {
-            requets = new Requests();
+            requets = new Requests(refresh);
             _newTourLogModel = new TourLogModel();
             TourId = tourId;
         }
@@ -76,7 +76,7 @@ namespace Tour_planner.UI.ViewModels
                     tourLog.Difficulty = NewTourLogModel.Difficulty;
                     tourLog.Rating = NewTourLogModel.Rating;
                     tourLog.Comment = NewTourLogModel.Comment;
-                    tourLog.Time = NewTourLogModel.TimeTime.ToString("dd-HH-mm");
+                    tourLog.Time = NewTourLogModel.TimeTime.ToString("dd:HH:mm");
                     tourLog.Date = NewTourLogModel.DateTime.ToString("yyyy-MM-dd");
 
                     requets.PostLog(tourLog, TourId);

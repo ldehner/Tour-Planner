@@ -17,9 +17,9 @@ namespace Tour_planner.UI.ViewModels
         private TourLogModel currenttourLogModel;
         private string Id;
 
-        public ChangeTourLogViewModel(TourLogModel currenttourModel, string id)
+        public ChangeTourLogViewModel(TourLogModel currenttourModel, string id, ref MainWindowViewModel refresh)
         {
-            this.requets = new Requests();
+            this.requets = new Requests(refresh);
             this.currenttourLogModel = currenttourModel;
             Id = id;
         }

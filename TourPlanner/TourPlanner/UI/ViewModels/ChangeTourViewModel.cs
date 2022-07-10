@@ -22,7 +22,7 @@ namespace Tour_planner.UI.ViewModels
 
         public ChangeTourViewModel(TourModel tour, ref MainWindowViewModel reload)
         {
-            requets = new Requests();
+            requets = new Requests(reload);
             CurrentTour = tour;
             Id = tour.Id;
             reloadModel = reload;
